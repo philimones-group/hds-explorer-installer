@@ -1,0 +1,48 @@
+#system global variables
+hds.explorer.mail.configured: true
+hds.explorer.constraints.father.age.min: 12
+hds.explorer.constraints.mother.age.min: 12
+hds.explorer.constraints.head.age.min: 12
+hds.explorer.constraints.spouse.age.min: 16
+hds.explorer.constraints.gender.checking: true
+hds.explorer.system.language: "en"
+hds.explorer.system.codegenerator: "org.philimone.hds.explorer.server.settings.generator.DefaultCodeGenerator"
+hds.explorer.system.path: "/var/lib/hds-explorer"
+
+
+# Default datasource for HDS-Database
+# Default Config
+dataSource.pooled: true
+dataSource.driverClassName: com.mysql.jdbc.Driver
+dataSource.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+dataSource.username: hds_explorer
+dataSource.password: d33_2019xx
+dataSource.url: jdbc:mysql://localhost/hds_explorer_db?createDatabaseIfNotExist=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useSSL=false
+
+# MySQL Config
+#dataSource.pooled: true
+#dataSource.driverClassName: com.mysql.jdbc.Driver
+#dataSource.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+#dataSource.username: hds_explorer
+#dataSource.password: d33_2019xx
+#dataSource.url: jdbc:mysql://localhost/hds_explorer_db?createDatabaseIfNotExist=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useSSL=false
+
+# Postgres Config
+#dataSource.pooled: true
+#dataSource.driverClassName: org.postgresql.Driver
+#dataSource.dialect: org.hibernate.dialect.PostgreSQL94Dialect
+#dataSource.username: hds_explorer
+#dataSource.password: d33_2019xx
+#dataSource.url: "jdbc:postgresql://localhost:5432/hds_explorer_db"
+
+# Don't forget to turn on access from a less secure app in your Gmail account configuration, otherwise, google will block it and return this error.
+#
+
+grails.mail.host: "smtp.gmail.com"
+grails.mail.port: 465
+grails.mail.username: "youremailaccount@gmail.com"
+grails.mail.password: "youremailaccountpassword"
+grails.mail.props.mail.smtp.auth: "true"
+grails.mail.props.mail.smtp.socketFactory.port: "465"
+grails.mail.props.mail.smtp.socketFactory.class: "javax.net.ssl.SSLSocketFactory"
+grails.mail.props.mail.smtp.socketFactory.fallback: "false"
