@@ -104,7 +104,7 @@
         <Property name="rows" type="int" value="4"/>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="label4mainsite">
+        <Component class="javax.swing.JLabel" name="lblWarFile">
           <Properties>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="0" id="blue" palette="1" red="0" type="palette"/>
@@ -116,7 +116,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel3">
+        <Component class="javax.swing.JLabel" name="lblWarFileDesc">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Noto Sans" size="11" style="0"/>
@@ -125,7 +125,7 @@
             <Property name="text" type="java.lang.String" value="&lt;html&gt;A java WAR file to be deployed in containers like Tomcat&lt;/html&gt;"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="label6mobilesite">
+        <Component class="javax.swing.JLabel" name="lblSql">
           <Properties>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="0" id="blue" palette="1" red="0" type="palette"/>
@@ -136,7 +136,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel4">
+        <Component class="javax.swing.JLabel" name="lblSqlDesc">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Noto Sans" size="11" style="0"/>
@@ -144,7 +144,7 @@
             <Property name="text" type="java.lang.String" value="An SQL file with database and user creation statements"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="label5servesite">
+        <Component class="javax.swing.JLabel" name="lblConf">
           <Properties>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="0" id="blue" palette="1" red="0" type="palette"/>
@@ -156,12 +156,28 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel5">
+        <Component class="javax.swing.JLabel" name="lblConfDesc">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Noto Sans" size="11" style="0"/>
             </Property>
             <Property name="text" type="java.lang.String" value="The app config. file that can be reused in other setups"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblReadme">
+          <Properties>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="0" id="blue" palette="1" red="0" type="palette"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;README.html&lt;/u&gt;&lt;/html&gt;"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblReadmeDesc">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Web page file containing deployment instructions "/>
           </Properties>
         </Component>
       </SubComponents>

@@ -5,13 +5,13 @@
 package org.philimones.hds.explorer.installer;
 
 import java.awt.Component;
-import java.awt.Desktop;
-import java.io.IOException;
-import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 
 /**
  *
@@ -30,11 +30,41 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     static final String KEY_SYSTEM_PATH = "hds.explorer.system.path"; //"/var/lib/hds-explorer"
     static final String KEY_EMAIL = "grails.mail.username";
     static final String KEY_EMAIL_PASSWORD = "grails.mail.password";
+    
+    private Map<String, String> mapConfigFile;
+    
     /**
      * Creates new form PanelDatabase
      */
     public PanelParameters() {
         initComponents();        
+        initListeners();
+        this.mapConfigFile = new LinkedHashMap<>();
+    }
+    
+    private void initListeners() {
+        this.addAncestorListener ( new AncestorListener () {
+            public void ancestorAdded ( AncestorEvent event ) {
+                
+            }
+
+            public void ancestorRemoved ( AncestorEvent event ) {
+                
+            }
+
+            public void ancestorMoved ( AncestorEvent event ) {
+                
+                
+                new Thread() {
+                    @Override
+                    public void run() {
+                        updateParametersFromConfig();
+                    }
+                    
+                }.start();
+                
+            }
+        } );
     }
 
     private String getSystemLanguage() {
@@ -48,6 +78,17 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                                         "org.philimone.hds.explorer.server.settings.generator.DefaultSimpleCodeGenerator"};
         int i = cboSystemCodeGen.getSelectedIndex();
         return cgens[i];
+    }
+    
+    private int getSystemLanguageIndex(String value) {        
+        List<String> list = Arrays.asList("en", "fr", "pt");
+        return list.indexOf(value);
+    }
+    
+    private int getCodeGeneratorIndex(String value) {
+        
+        List<String> list = Arrays.asList("org.philimone.hds.explorer.server.settings.generator.DefaultCodeGenerator", "org.philimone.hds.explorer.server.settings.generator.DefaultSimpleCodeGenerator");
+        return list.indexOf(value);
     }
     
     /**
@@ -115,7 +156,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTitleInfo1))
-                .addGap(262, 262, 262))
+                .addContainerGap(181, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -292,11 +333,13 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(3, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -404,5 +447,35 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
         map.put(KEY_EMAIL_PASSWORD, new String(txtEmailPassword.getPassword()));
         
         return map;
+    }
+    
+    public void setLoadedConfigurationMap(Map<String, String> map) {
+        this.mapConfigFile.putAll(map);
+    }
+    
+    private void updateParametersFromConfig() {
+        String respath = mapConfigFile.get(KEY_SYSTEM_PATH);
+        String syslang = mapConfigFile.get(KEY_SYS_LANG);
+        String codegen = mapConfigFile.get(KEY_SYS_CODEGEN);
+        String minfath = mapConfigFile.get(KEY_MIN_FATHER_AGE);
+        String minmoth = mapConfigFile.get(KEY_MIN_MOTHER_AGE);
+        String minspou = mapConfigFile.get(KEY_MIN_SPOUSE_AGE);
+        String minhead = mapConfigFile.get(KEY_MIN_HEAD_AGE);
+        String mailcon = mapConfigFile.get(KEY_MAIL_CONFIG);
+        String emailad = mapConfigFile.get(KEY_EMAIL);
+        String passwrd = mapConfigFile.get(KEY_EMAIL_PASSWORD);
+                
+        
+        txtSystemPath.setText(respath);
+        cboSystemLanguage.setSelectedIndex(getSystemLanguageIndex(syslang));
+        cboSystemCodeGen.setSelectedIndex(getCodeGeneratorIndex(codegen));
+        txtMinFatherAge.setText(minfath);
+        txtMinMotherAge.setText(minmoth);
+        txtMinSpouseAge.setText(minspou);
+        txtMinHeadAge.setText(minhead);
+        chkUseGmail.setSelected(mailcon.equals("true"));
+        txtEmail.setText(emailad);
+        txtEmailPassword.setText(passwrd);
+        
     }
 }

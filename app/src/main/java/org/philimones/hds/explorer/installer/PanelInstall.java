@@ -5,7 +5,27 @@
 package org.philimones.hds.explorer.installer;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.JarURLConnection;
+import java.net.URI;
+import java.nio.file.CopyOption;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.FileAttribute;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
+import org.zeroturnaround.zip.ZipUtil;
 
 /**
  *
@@ -13,10 +33,24 @@ import java.util.Map;
  */
 public class PanelInstall extends javax.swing.JPanel implements IPage {
     
-    private File selectedOutputDir;
-    private File outputDirectory;
+    static final String KEY_DATASOURCE_HOSTNAME = "dataSource.hostname";
+    static final String KEY_DATASOURCE_DATABASE = "dataSource.database";
+    static final String KEY_DATASOURCE_USERNAME = "dataSource.username";
+    static final String KEY_DATASOURCE_PASSWORD = "dataSource.password";
+    static final String KEY_DATASOURCE_DRIVER = "dataSource.driverClassName";
+    
+    static final String KEY_SYSTEM_PATH = "hds.explorer.system.path";
+    
+    static final String MYSQL_DRIVER_VALUE = "com.mysql.jdbc.Driver";
+    static final String POSTGRES_DRIVER_VALUE = "org.postgresql.Driver";
+    
+    private File hdsWarFile;
+    private File outputDirectory;    
     private Map<String, String> appConfigMap;
     private String appConfigText;
+    private String mysqlCreateText;
+    private String postgresCreateText;
+    private String readmeText;
     
     private InstallListener installListener;
     
@@ -25,6 +59,33 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
      */
     public PanelInstall() {
         initComponents();
+        readCreateFiles();
+        initListeners();
+    }
+    
+    private void initListeners() {
+        this.addAncestorListener ( new AncestorListener () {
+            public void ancestorAdded ( AncestorEvent event ) {
+                System.out.println("Component added somewhere " + event.getComponent());
+            }
+
+            public void ancestorRemoved ( AncestorEvent event ) {
+                System.out.println("Component removed from container " + event.getComponent());
+            }
+
+            public void ancestorMoved ( AncestorEvent event ) {
+                System.out.println("Component container moved "+ event.getComponent());
+                
+                new Thread() {
+                    @Override
+                    public void run() {
+                        startInstall();
+                    }
+                    
+                }.start();
+                
+            }
+        } );
     }
     
     /**
@@ -47,12 +108,8 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
         lblConfiguring = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(701, 473));
+        setOpaque(false);
         setPreferredSize(new java.awt.Dimension(701, 473));
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                formComponentShown(evt);
-            }
-        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -152,10 +209,6 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtOutputDirActionPerformed
 
-    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        startInstall();
-    }//GEN-LAST:event_formComponentShown
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
@@ -169,6 +222,38 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
     private javax.swing.JTextField txtOutputDir;
     // End of variables declaration//GEN-END:variables
 
+    private void readCreateFiles() {
+        StringBuilder textMysql = new StringBuilder();
+        StringBuilder textPostg = new StringBuilder();
+        StringBuilder textReadm = new StringBuilder();
+        
+        Scanner scan1 = new Scanner(getClass().getResourceAsStream("/samples/create-user-mysql.sql"));
+        while (scan1.hasNextLine()) {
+            String line = scan1.nextLine();
+            textMysql.append(line+"\n");
+        }
+        scan1.close();
+                        
+        Scanner scan2 = new Scanner(getClass().getResourceAsStream("/samples/create-user-postgres.sql"));
+        while (scan2.hasNextLine()) {
+            String line = scan2.nextLine();
+            textPostg.append(line+"\n");
+        }
+        scan2.close();
+        
+        Scanner scan3 = new Scanner(getClass().getResourceAsStream("/samples/README.html"));
+        while (scan3.hasNextLine()) {
+            String line = scan3.nextLine();
+            textReadm.append(line+"\n");
+        }
+        scan3.close();
+        
+        this.mysqlCreateText = textMysql.toString();
+        this.postgresCreateText = textPostg.toString();
+        this.readmeText = textReadm.toString();
+        
+    }
+    
     @Override
     public ValidationResult validatePage() {
         return new ValidationResult(ValidationType.ERROR, "No field was filled", null);
@@ -183,25 +268,229 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
         this.installListener = listener;
     }
     
-    public void setInstallData(File outputDir, Map<String, String> allMap, String appConfigInText) {
+    public void setInstallData(File outputDir, File hdsWarFile, Map<String, String> allMap, String appConfigInText) {
         this.outputDirectory = outputDir;
+        this.hdsWarFile = hdsWarFile;
         this.appConfigMap = allMap;
         this.appConfigText = appConfigInText;
         
         this.txtOutputDir.setText(this.outputDirectory.toString());
     }
+    
+    private void setConfiguringText(String text) {
+        this.lblConfiguring.setText(text);
+        this.lblConfiguring.invalidate();
+        this.lblConfiguring.repaint();
+    }
 
-    private void startInstall() {
+    public void startInstall() {
+        System.out.println("starting install");
+        
+        this.pbarConfiguring.setIndeterminate(true);
+        this.pbarConfiguring.invalidate();
+        this.pbarConfiguring.repaint();
+        
+        
+        //0. create a temporary directory - and extract war file to it
+        File tempDir = createTemporaryDir();
+        delay(500);
+        
+        File tempWarFile = copyWarToTemporaryDir(tempDir);
+        delay(500);
+        
         //1. create file app-config.yml and insert content
+        File appConfigFile = createAppConfigFile(tempDir);
+        delay(300);
+        
         //2. create database file and insert content
+        File databaseFile = createDatabaseFile(tempDir);
+        delay(400);
+        
         //3. create README file and insert content
-        //4. insert app-config.yml inside hds-explorer-server.war
-        //5. save the file hds-explorer.war in output directory
-        //6. save database file, app-config.yml and README in output directory
-        //X. show percentage while completing these tasks
+        File readmeFile = createReadmeFile(tempDir, databaseFile, tempWarFile);
+        delay(500);
+        
+        //4. insert app-config.yml inside hds-explorer-server.war        
+        injectFileToWar(tempWarFile, this.outputDirectory, appConfigFile, "WEB-INF/classes/app-config.yml");
+        delay(1000);
+        
+        //5. save the file hds-explorer-server.war, app-config.yml, create-database, REAME.txt in output directory
+        setConfiguringText("Saving all created files in Output Directory");
+        //copyFileToDirectory(this.outputDirectory, tempWarFile);
+        copyFileToDirectory(this.outputDirectory, appConfigFile);
+        copyFileToDirectory(this.outputDirectory, databaseFile);
+        copyFileToDirectory(this.outputDirectory, readmeFile);
+        delay(500);
+        
+        finishInstall();        
+    }
+    
+    private File createTemporaryDir() {
+        try {
+            setConfiguringText("Creating Temporary Directory");
+            Path path = Files.createTempDirectory("hdsInstaller");
+            return path.toFile();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(PanelInstall.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
+    
+    private File copyWarToTemporaryDir(File tempDir) {
+        
+        setConfiguringText("Copying HDS-Explorer WAR file to temporary directory");
+                
+        return copyFileToDirectory(tempDir, this.hdsWarFile);
+    }
+    
+    private File createAppConfigFile(File tempDir) {
+        setConfiguringText("Creating and saving content to app-config.yml file");
+        
+        File appConfigFile = createNewFile(tempDir, "app-config.yml");
+        writeToFile(appConfigFile, appConfigText);                            
+        
+        return appConfigFile;
+    }
+    
+    private File createDatabaseFile(File tempDir) {
+        
+        setConfiguringText("Creating and saving user and database creation files");
+        
+        //create-user-mysql.sql
+        //create-user-postgres.sql              
+        
+        String hostname = appConfigMap.get(KEY_DATASOURCE_HOSTNAME);
+        String database = appConfigMap.get(KEY_DATASOURCE_DATABASE);
+        String username = appConfigMap.get(KEY_DATASOURCE_USERNAME);
+        String password = appConfigMap.get(KEY_DATASOURCE_PASSWORD);
+        String dbdriver = appConfigMap.get(KEY_DATASOURCE_DRIVER);
+        
+        if (dbdriver.equals(MYSQL_DRIVER_VALUE)) {
+            
+            String content = mysqlCreateText;
+            content = content.replace("$DATABASE", database);
+            content = content.replace("$HOSTNAME", hostname);
+            content = content.replace("$USERNAME", username);
+            content = content.replace("$PASSWORD", password);
+                        
+            File newFile = createNewFile(tempDir, "create-user-mysql.sql");
+            writeToFile(newFile, content);
+            
+            return newFile;
+            
+        } else if (dbdriver.equals(POSTGRES_DRIVER_VALUE)) {
+            
+            String content = postgresCreateText;
+            content = content.replace("$DATABASE", database);
+            content = content.replace("$HOSTNAME", hostname);
+            content = content.replace("$USERNAME", username);
+            content = content.replace("$PASSWORD", password);
+            
+            File newFile = createNewFile(tempDir, "create-user-postgres.sql");
+            writeToFile(newFile, content);
+            
+            return newFile;
+        }
+        
+        return null;
+    }
+    
+    private File createReadmeFile(File tempDir, File sqlFile, File warFile) {
+        
+        setConfiguringText("Creating and saving README file");
+        
+        String sql_mysql = "mysql -u $MYSQL_USER -p &lt; $CREATE_USER_DB";
+        String sql_postg = "psql -h $HOSTNAME -U $POSTGRES_USER -f $CREATE_USER_DB";
+        
+        File newFile = createNewFile(tempDir, "README.html");
+        
+        //readme stuff
+        String resources = appConfigMap.get(KEY_SYSTEM_PATH);
+        String dbdriver = appConfigMap.get(KEY_DATASOURCE_DRIVER);
+        String dbms = (dbdriver.equals(MYSQL_DRIVER_VALUE)) ? "MySQL" : (dbdriver.equals(POSTGRES_DRIVER_VALUE)) ? "PostgreSQL" : "";
+        String dbcreate_stmt = (dbdriver.equals(MYSQL_DRIVER_VALUE)) ? sql_mysql : (dbdriver.equals(POSTGRES_DRIVER_VALUE)) ? sql_postg : "";
+                    
+        String content = readmeText;
+        content = content.replace("$DB_CREATE_STATEMENT", dbcreate_stmt);
+        content = content.replace("$OUTPUT_DIR", this.outputDirectory.getAbsolutePath());
+        content = content.replace("$CREATE_USER_DB", sqlFile.getName());
+        content = content.replace("$RESOURCES_DIR", resources);
+        content = content.replace("$WAR_FILENAME", warFile.getName());
+        content = content.replace("$DBMS", dbms);
+        
+        writeToFile(newFile, content);
+        
+        return newFile;
+    }
+    
+    private void injectFileToWar(File warFile, File destinationDirectory, File fileToInject, String path) {
+        
+        setConfiguringText("Injecting app-config.yml file into HDS-Explorer WAR File");
+                 
+        System.out.println("conf: "+fileToInject.getAbsolutePath());
+        System.out.println("url: "+warFile.toURI().toString());
+
+        File destWarFile = createNewFile(destinationDirectory, warFile.getName());
+        
+        boolean replaced = ZipUtil.replaceEntry(warFile, path, fileToInject, destWarFile);
+
+        System.out.println("AppConfig replaced: "+replaced);
+           
+    }
+    
+    private File createNewFile(File fileDirectory, String newFilename) {
+        File newFile = new File(fileDirectory.getAbsolutePath() + "/" + newFilename);
+        
+        try {
+            newFile.createNewFile();
+            return newFile;
+            
+        } catch (IOException ex) {
+            Logger.getLogger(PanelInstall.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
+    
+    private void writeToFile(File file, String content) {
+         try {
+            PrintStream output = new PrintStream(file);
+            output.print(content);
+            output.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PanelInstall.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private File copyFileToDirectory(File fileDirectory, File fileToCopy) {
+        File newFile = new File(fileDirectory.getAbsolutePath() + "/" + fileToCopy.getName());
+        
+        try {
+            Path newPath = Files.copy(fileToCopy.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            
+            return newPath.toFile();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(PanelInstall.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        
+        return null;
+    }
+    
+    private void delay(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(PanelInstall.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void finishInstall() {
+        
+        setConfiguringText("Finished configuring HDS-Explorer Server Files");
+        
         this.pbarConfiguring.setIndeterminate(false);
         this.pbarConfiguring.setMaximum(100);
         this.pbarConfiguring.setValue(100);
@@ -212,4 +501,5 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
             this.installListener.finishedInstallation();
         }
     }
+    
 }

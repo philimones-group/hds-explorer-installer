@@ -4,6 +4,7 @@
  */
 package org.philimones.hds.explorer.installer;
 
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.UIDefaults;
 
 /**
  *
@@ -24,6 +26,15 @@ public class PanelWelcome extends javax.swing.JPanel implements IPage {
      */
     public PanelWelcome() {
         initComponents();
+        
+        Color bgColor = new Color(214, 217, 223);
+        
+        UIDefaults defaults = new UIDefaults();
+        defaults.put("EditorPane[Enabled].backgroundPainter", bgColor);
+        label3Info.putClientProperty("Nimbus.Overrides", defaults);
+        label3Info.putClientProperty("Nimbus.Overrides.InheritDefaults", true);
+        label3Info.setBackground(bgColor);
+
     }
 
     private void openUrl(URI uri) {
@@ -69,11 +80,10 @@ public class PanelWelcome extends javax.swing.JPanel implements IPage {
         label2welcome.setText("Welcome to the HDS-Explorer Server Setup wizard");
 
         label3Info.setEditable(false);
-        label3Info.setBackground(null);
-        label3Info.setBorder(null);
+        label3Info.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         label3Info.setContentType("text/html"); // NOI18N
         label3Info.setText("<html>   <head></head>   <body>    HDS-Explorer Server application provides the data repository for  a Health and Demographics Surveillance system and data management tool   for data collection for program or research implementation.    <br><br> This setup wizard will help you customize the HDS-Explorer parameters to meet your HDSS Site,  after it finishes a Java WAR archive will be generated with the defined parameters.  <br> <br> <b>More information about HDS-Explorer</b><br><br>   </body> </html> ");
-        label3Info.setOpaque(false);
+        label3Info.setFocusable(false);
 
         label4mainsite.setForeground(java.awt.Color.blue);
         label4mainsite.setText("<html><u>https://www.hds-explorer.org </u></html>");

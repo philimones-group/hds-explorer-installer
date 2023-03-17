@@ -50,12 +50,14 @@ public class PanelGoodbye extends javax.swing.JPanel implements IPage {
         label2welcome = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        label4mainsite = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        label6mobilesite = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        label5servesite = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lblWarFile = new javax.swing.JLabel();
+        lblWarFileDesc = new javax.swing.JLabel();
+        lblSql = new javax.swing.JLabel();
+        lblSqlDesc = new javax.swing.JLabel();
+        lblConf = new javax.swing.JLabel();
+        lblConfDesc = new javax.swing.JLabel();
+        lblReadme = new javax.swing.JLabel();
+        lblReadmeDesc = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(701, 473));
         setPreferredSize(new java.awt.Dimension(701, 473));
@@ -77,35 +79,43 @@ public class PanelGoodbye extends javax.swing.JPanel implements IPage {
 
         jPanel1.setLayout(new java.awt.GridLayout(4, 2, -150, 0));
 
-        label4mainsite.setForeground(java.awt.Color.blue);
-        label4mainsite.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        label4mainsite.setText("<html><u>hds-explorer-server.war</u></html>");
-        label4mainsite.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jPanel1.add(label4mainsite);
+        lblWarFile.setForeground(java.awt.Color.blue);
+        lblWarFile.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblWarFile.setText("<html><u>hds-explorer-server.war</u></html>");
+        lblWarFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jPanel1.add(lblWarFile);
 
-        jLabel3.setFont(new java.awt.Font("Noto Sans", 0, 11)); // NOI18N
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel3.setText("<html>A java WAR file to be deployed in containers like Tomcat</html>");
-        jPanel1.add(jLabel3);
+        lblWarFileDesc.setFont(new java.awt.Font("Noto Sans", 0, 11)); // NOI18N
+        lblWarFileDesc.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblWarFileDesc.setText("<html>A java WAR file to be deployed in containers like Tomcat</html>");
+        jPanel1.add(lblWarFileDesc);
 
-        label6mobilesite.setForeground(java.awt.Color.blue);
-        label6mobilesite.setText("<html><u>create-user-mysql.sql</u></html>");
-        label6mobilesite.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jPanel1.add(label6mobilesite);
+        lblSql.setForeground(java.awt.Color.blue);
+        lblSql.setText("<html><u>create-user-mysql.sql</u></html>");
+        lblSql.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jPanel1.add(lblSql);
 
-        jLabel4.setFont(new java.awt.Font("Noto Sans", 0, 11)); // NOI18N
-        jLabel4.setText("An SQL file with database and user creation statements");
-        jPanel1.add(jLabel4);
+        lblSqlDesc.setFont(new java.awt.Font("Noto Sans", 0, 11)); // NOI18N
+        lblSqlDesc.setText("An SQL file with database and user creation statements");
+        jPanel1.add(lblSqlDesc);
 
-        label5servesite.setForeground(java.awt.Color.blue);
-        label5servesite.setText("<html><u>app-config.yml</u></html>");
-        label5servesite.setToolTipText("");
-        label5servesite.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jPanel1.add(label5servesite);
+        lblConf.setForeground(java.awt.Color.blue);
+        lblConf.setText("<html><u>app-config.yml</u></html>");
+        lblConf.setToolTipText("");
+        lblConf.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jPanel1.add(lblConf);
 
-        jLabel5.setFont(new java.awt.Font("Noto Sans", 0, 11)); // NOI18N
-        jLabel5.setText("The app config. file that can be reused in other setups");
-        jPanel1.add(jLabel5);
+        lblConfDesc.setFont(new java.awt.Font("Noto Sans", 0, 11)); // NOI18N
+        lblConfDesc.setText("The app config. file that can be reused in other setups");
+        jPanel1.add(lblConfDesc);
+
+        lblReadme.setForeground(java.awt.Color.blue);
+        lblReadme.setText("<html><u>README.html</u></html>");
+        lblReadme.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jPanel1.add(lblReadme);
+
+        lblReadmeDesc.setText("Web page file containing deployment instructions ");
+        jPanel1.add(lblReadmeDesc);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -141,15 +151,17 @@ public class PanelGoodbye extends javax.swing.JPanel implements IPage {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel label1setup;
     private javax.swing.JLabel label2welcome;
-    private javax.swing.JLabel label4mainsite;
-    private javax.swing.JLabel label5servesite;
-    private javax.swing.JLabel label6mobilesite;
+    private javax.swing.JLabel lblConf;
+    private javax.swing.JLabel lblConfDesc;
+    private javax.swing.JLabel lblReadme;
+    private javax.swing.JLabel lblReadmeDesc;
+    private javax.swing.JLabel lblSql;
+    private javax.swing.JLabel lblSqlDesc;
+    private javax.swing.JLabel lblWarFile;
+    private javax.swing.JLabel lblWarFileDesc;
     // End of variables declaration//GEN-END:variables
 
     @Override

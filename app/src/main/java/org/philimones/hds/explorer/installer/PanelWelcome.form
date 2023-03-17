@@ -97,15 +97,14 @@
     <Component class="javax.swing.JEditorPane" name="label3Info">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="null" type="code"/>
-        </Property>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="null" type="code"/>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+            <EmptyBorder/>
+          </Border>
         </Property>
         <Property name="contentType" type="java.lang.String" value="text/html" noResource="true"/>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;   &lt;head&gt;&lt;/head&gt;   &lt;body&gt;    HDS-Explorer Server application provides the data repository for  a Health and Demographics Surveillance system and data management tool   for data collection for program or research implementation.    &lt;br&gt;&lt;br&gt; This setup wizard will help you customize the HDS-Explorer parameters to meet your HDSS Site,  after it finishes a Java WAR archive will be generated with the defined parameters.  &lt;br&gt; &lt;br&gt; &lt;b&gt;More information about HDS-Explorer&lt;/b&gt;&lt;br&gt;&lt;br&gt;   &lt;/body&gt; &lt;/html&gt; "/>
-        <Property name="opaque" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="label4mainsite">

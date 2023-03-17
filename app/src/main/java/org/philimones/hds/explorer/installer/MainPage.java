@@ -59,10 +59,6 @@ public class MainPage extends javax.swing.JFrame implements InstallListener {
         
         this.pageInstall.setInstallListener(this);
     }
-
-    private void loadConfigFile(String appConfigFile) {
-        
-    }
     
     private void createReviewInfo() {
        
@@ -89,6 +85,7 @@ public class MainPage extends javax.swing.JFrame implements InstallListener {
         this.reviewString = builder.toString();
         
         this.pageReview.setReviewText(this.reviewString);
+        this.pageReview.initWarRetrieval();
     }
     
     private void setInstallData() {
@@ -97,9 +94,8 @@ public class MainPage extends javax.swing.JFrame implements InstallListener {
 
         allMap.putAll(pageDatabase.exportValues());
         allMap.putAll(pageParameters.exportValues());
-        
-        
-        this.pageInstall.setInstallData(this.pageReview.getSelectedOutputDirectory(), allMap, this.reviewString);
+                
+        this.pageInstall.setInstallData(this.pageReview.getSelectedOutputDirectory(), this.pageReview.getSelectedWarFile(), allMap, this.reviewString);
     }
     
     private String getAppConfigLines() {
@@ -198,6 +194,8 @@ public class MainPage extends javax.swing.JFrame implements InstallListener {
         this.btNext.setEnabled(true);
         this.btCancel.setEnabled(true);
         
+        this.pageParameters.setLoadedConfigurationMap(this.pageDatabase.getLoadedConfigurationFileMap());
+        
         currentPage = Page.PARAMETERS;
     }
     
@@ -232,7 +230,7 @@ public class MainPage extends javax.swing.JFrame implements InstallListener {
         
         currentPage = Page.INSTALL;
         
-        setInstallData();
+        setInstallData();        
     }
     
     private void gotoPage(Page page) {
@@ -241,7 +239,7 @@ public class MainPage extends javax.swing.JFrame implements InstallListener {
             case DATABASE: gotoDatabasePage(); break;
             case PARAMETERS: gotoParametersPage(); break;
             case REVIEW: gotoReviewPage(); break;
-            case INSTALL: gotoInstallPage();
+            case INSTALL: gotoInstallPage(); break;
             case GOODBYE: gotoGoodbyePage(); break;
         }
     }

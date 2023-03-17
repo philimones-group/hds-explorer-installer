@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <title>HDS-Explorer Server Installation Instructions</title>
+        <style>
+            code {
+              /*font-family: Consolas,"courier new";*/
+              color: crimson;
+              background-color: #f1f1f1;
+              padding: 2px;
+              font-size: 105%;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>HDS-Explorer Server</h1>
+        <p><img src="https://img.shields.io/badge/platform-Grails-blue.svg" alt="Platform">
+            <img src="https://img.shields.io/badge/platform-Groovy-blue.svg" alt="Language">
+            <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/license-Apache%25202.0-blue.svg" alt="License"></a></p>
+        <p>HDS-Explorer Server application provides the data repository for a Health and Demographics Surveillance system and data management tool for data collection for program or research implementation</p>
+        <p>This application server can be deployed on a Tomcat server (or any servlet 2.5+ compatible web container) and backed by any Hibernate supported database (eg. MySQL or PostgreSQL database server, etc).</p>
+        <ul>
+            <li>HDS-Explorer website: <a href="https://opendatakit.org/use/aggregate/">https://www.hds-explorer.org</a></li>
+        </ul>
+        <h2>Deployment Instructions</h2>
+        <p>After using the HDS-Explorer Setup wizard configuration, to complete the installation you need to:</p>
+        <p>Lets consider that we are in a Linux distribution and Tomcat Server that was manually installed in the path: /opt/tomcat.</p>
+        <p><strong>1. Goto the output directory where the installer created the files</strong><br>
+            <code>cd $OUTPUT_DIR</code></p>
+        <p><strong>2. Configure the $DBMS Database Access (import the file <em><strong>$CREATE_USER_DB</strong></em> to $DBMS database)</strong><br>
+            <code>$DB_CREATE_STATEMENT</code></p>
+        <p><strong>3. Create the hds-explorer resources directory</strong><br>
+            <code>sudo mkdir $RESOURCES_DIR</code></p>
+        <p><strong>4. Grant access to tomcat user to the folder $RESOURCES_DIR</strong><br>
+            <code>sudo chown -R tomcat:tomcat $RESOURCES_DIR</code></p>
+        <p><strong>5. Copy the war file to $TOMCAT/webapps</strong><br>
+            <code>cp $WAR_FILENAME /opt/tomcat/webapps</code></p>
+        <p><strong>6. Start the webserver or we can copy the war file while the server is running and it will be deployed onfly.</strong><br>
+            <code>/opt/tomcat/bin/startup.sh</code></p>
+        <br>
+        <br>
+    </body>
+</html>

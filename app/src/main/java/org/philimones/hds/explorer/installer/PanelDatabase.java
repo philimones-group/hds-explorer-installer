@@ -5,8 +5,18 @@
 package org.philimones.hds.explorer.installer;
 
 import java.awt.Component;
+import java.awt.event.ItemEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -27,15 +37,31 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
     static final String KEY_DATASOURCE_USERNAME = "dataSource.username";
     static final String KEY_DATASOURCE_PASSWORD = "dataSource.password";
     static final String KEY_DATASOURCE_URL = "dataSource.url";
+    static final String KEY_DATASOURCE_HOSTNAME = "dataSource.hostname";
+    static final String KEY_DATASOURCE_DATABASE = "dataSource.database";
+    
+    static final String KEY_SYSTEM_PATH = "hds.explorer.system.path"; 
+    
+    private JFileChooser configFileChooser;
+    private Map<String, String> mapConfigFile;
     
     /**
      * Creates new form PanelDatabase
      */
     public PanelDatabase() {
         initComponents();
+        
+        this.mapConfigFile = new LinkedHashMap<>();
                         
         checkboxesGroup.add(chkMySqlDb);
         checkboxesGroup.add(chkPostgresDb);
+        
+        this.configFileChooser = new JFileChooser();
+        this.configFileChooser.setCurrentDirectory(new File("."));
+        this.configFileChooser.setDialogTitle("Select the Configuration File");
+        this.configFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        this.configFileChooser.setFileFilter(new FileNameExtensionFilter("HDS-Explorer YAML Config File", "yml"));
+        this.configFileChooser.setAcceptAllFileFilterUsed(false);
     }
     
     private String getUrl() {
@@ -98,6 +124,10 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
         txtPasswordConfirm = new javax.swing.JPasswordField();
         lblUsername1 = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        txtConfigFile = new javax.swing.JTextField();
+        btLoadConfigFile = new javax.swing.JButton();
 
         setMinimumSize(new java.awt.Dimension(701, 473));
         setPreferredSize(new java.awt.Dimension(701, 473));
@@ -152,11 +182,16 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
         panelDbms.setBorder(javax.swing.BorderFactory.createTitledBorder("DBMS Systems"));
 
         chkMySqlDb.setText("MySQL Database");
+        chkMySqlDb.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                chkMySqlDbItemStateChanged(evt);
+            }
+        });
 
         chkPostgresDb.setText("PostgreSQL Database");
-        chkPostgresDb.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkPostgresDbActionPerformed(evt);
+        chkPostgresDb.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                chkPostgresDbItemStateChanged(evt);
             }
         });
 
@@ -165,16 +200,16 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
         panelDbmsLayout.setHorizontalGroup(
             panelDbmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelDbmsLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addGap(15, 15, 15)
                 .addGroup(panelDbmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(chkPostgresDb)
                     .addComponent(chkMySqlDb))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         panelDbmsLayout.setVerticalGroup(
             panelDbmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelDbmsLayout.createSequentialGroup()
-                .addGap(41, 41, 41)
+                .addGap(24, 24, 24)
                 .addComponent(chkMySqlDb)
                 .addGap(20, 20, 20)
                 .addComponent(chkPostgresDb)
@@ -213,7 +248,7 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
         panelSettingsLayout.setHorizontalGroup(
             panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelSettingsLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addGap(17, 17, 17)
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(panelSettingsLayout.createSequentialGroup()
                         .addComponent(lblPasswordConfirm)
@@ -233,12 +268,12 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
                             .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtHostname, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
         panelSettingsLayout.setVerticalGroup(
             panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelSettingsLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
+                .addContainerGap()
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblHostname)
                     .addComponent(txtHostname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -262,47 +297,104 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPasswordConfirm)
                     .addComponent(txtPasswordConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
+        jLabel1.setText("Config File");
+
+        txtConfigFile.setDisabledTextColor(new java.awt.Color(0, 51, 51));
+        txtConfigFile.setEnabled(false);
+
+        btLoadConfigFile.setText("Load saved config");
+        btLoadConfigFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btLoadConfigFileActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtConfigFile, javax.swing.GroupLayout.PREFERRED_SIZE, 466, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btLoadConfigFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtConfigFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btLoadConfigFile))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelDbms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(panelDbms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelDbms, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(10, 10, 10))
+                    .addComponent(panelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void chkPostgresDbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPostgresDbActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_chkPostgresDbActionPerformed
 
     private void txtHostnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHostnameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtHostnameActionPerformed
 
+    private void btLoadConfigFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLoadConfigFileActionPerformed
+        loadConfigurationFile();        // TODO add your handling code here:
+    }//GEN-LAST:event_btLoadConfigFileActionPerformed
+
+    private void chkMySqlDbItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMySqlDbItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            txtPort.setText("3306");
+        }
+    }//GEN-LAST:event_chkMySqlDbItemStateChanged
+
+    private void chkPostgresDbItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkPostgresDbItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            txtPort.setText("5432");
+        }
+    }//GEN-LAST:event_chkPostgresDbItemStateChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btLoadConfigFile;
     private javax.swing.ButtonGroup checkboxesGroup;
     private javax.swing.JRadioButton chkMySqlDb;
     private javax.swing.JRadioButton chkPostgresDb;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblDatabase;
     private javax.swing.JLabel lblHostname;
     private javax.swing.JLabel lblIcon;
@@ -315,6 +407,7 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
     private javax.swing.JLabel lblUsername1;
     private javax.swing.JPanel panelDbms;
     private javax.swing.JPanel panelSettings;
+    private javax.swing.JTextField txtConfigFile;
     private javax.swing.JTextField txtDatabase;
     private javax.swing.JTextField txtHostname;
     private javax.swing.JPasswordField txtPassword;
@@ -382,13 +475,149 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
     @Override
     public Map<String, String> exportValues() {
         Map<String,String> map = new LinkedHashMap<>();
+        
         map.put(KEY_DATASOURCE_POOLED, "true");
         map.put(KEY_DATASOURCE_DRIVER, chkMySqlDb.isSelected() ? DRIVER_MYSQL : DRIVER_POSTGRES);
         map.put(KEY_DATASOURCE_DIALECT, chkMySqlDb.isSelected() ? DIALECT_MYSQL : DIALECT_POSTGRES);
         map.put(KEY_DATASOURCE_USERNAME, txtUsername.getText());
         map.put(KEY_DATASOURCE_PASSWORD, new String(txtPassword.getPassword()));
         map.put(KEY_DATASOURCE_URL, getUrl());
+        map.put(KEY_DATASOURCE_HOSTNAME, txtHostname.getText());
+        map.put(KEY_DATASOURCE_DATABASE, txtDatabase.getText());
         
         return map;
+    }
+    
+    private void loadConfigurationFile() {
+        int result = this.configFileChooser.showOpenDialog(this);
+        
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedConfigFile = this.configFileChooser.getSelectedFile();
+            
+            try {
+                //validate yaml file
+                Map<String, String> map = new LinkedHashMap<>();
+                Scanner scan = new Scanner(selectedConfigFile);
+                while (scan.hasNextLine()) {
+                    String line = scan.nextLine();
+                    
+                    if (line.trim().startsWith("#")) continue;
+                    
+                    if (line.contains(": ")) {
+                        String[] rsplit = line.split(": ");
+                        map.put(rsplit[0].trim(), rsplit[1].trim());
+                    }
+                }
+                
+                if (map.containsKey(KEY_SYSTEM_PATH)) { //is a valid config file
+                    this.mapConfigFile.putAll(map);
+                    txtConfigFile.setText(selectedConfigFile.getAbsolutePath());
+                    updateParametersFromConfig();
+                } else {
+                    messageBox("Configuration File", "The selected configuration file is not a valid configuration file of HDS-Explorer");
+                    txtConfigFile.setText("");
+                    this.mapConfigFile.clear();
+                }
+                
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(PanelDatabase.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    private void updateParametersFromConfig() {
+        
+        for (Entry<String, String> entry :mapConfigFile.entrySet()) {
+            System.out.println(entry.getKey()+" -> "+entry.getValue());
+        }
+        
+        String url = mapConfigFile.get(KEY_DATASOURCE_URL);
+        String hostname = getHostname(url);
+        String database = getDatabase(url, hostname);
+        String username = mapConfigFile.get(KEY_DATASOURCE_USERNAME);
+        String password = mapConfigFile.get(KEY_DATASOURCE_PASSWORD);
+        String dbdriver = mapConfigFile.get(KEY_DATASOURCE_DRIVER);
+        
+        boolean isMysql = dbdriver.equals(PanelInstall.MYSQL_DRIVER_VALUE);
+        boolean isPostg = dbdriver.equals(PanelInstall.POSTGRES_DRIVER_VALUE);
+        
+        chkMySqlDb.setSelected(isMysql);
+        chkPostgresDb.setSelected(isPostg);
+        
+        txtHostname.setText(hostname);
+        txtPort.setText(getPort(url, hostname));
+        txtDatabase.setText(database);
+        txtUsername.setText(username);
+        txtPassword.setText(password);
+        txtPasswordConfirm.setText(password);
+        
+    }
+    
+    private String getHostname(String url) {
+        //"jdbc:postgresql://$HOSTNAME:$PORT/$DATABASE"
+        //"jdbc:mysql://$HOSTNAME:$PORT/$DATABASE?createDatabaseIfNotExist=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useSSL=false"
+                
+        String hostname = url;
+        
+        hostname = hostname.replace("jdbc:postgresql://", "");
+        hostname = hostname.replace("jdbc:mysql://", "");
+        //hostname:3306/database or hostname/database
+        
+        if (!hostname.contains(":")) { //no database defined
+            return hostname.substring(0, hostname.indexOf("/"));
+        } else {
+            return hostname.substring(0, hostname.indexOf(":"));
+        }
+        
+    }
+    
+    private String getPort(String url, String hostname) {
+        //"jdbc:postgresql://$HOSTNAME:$PORT/$DATABASE"
+        //"jdbc:mysql://$HOSTNAME:$PORT/$DATABASE?createDatabaseIfNotExist=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useSSL=false"
+        
+        boolean ismysql = url.startsWith("jdbc:mysql:");
+        boolean ispostgres = url.startsWith("jdbc:postgresql:");
+        
+        String port = url;
+        
+        port = port.replace("jdbc:postgresql://"+hostname, "");
+        port = port.replace("jdbc:mysql://"+hostname, "");
+        //:3306/database or /database
+        
+        if (!port.startsWith(":")) { //no hostname defined
+            return ismysql ? "3306" : ispostgres ? "5432" : "";
+        }
+        
+        port = port.replace(":", "");
+        port = port.substring(0, port.indexOf("/"));
+                       
+        return port;        
+    }
+    
+    private String getDatabase(String url, String hostname) {
+        //"jdbc:postgresql://$HOSTNAME:$PORT/$DATABASE"
+        //"jdbc:mysql://$HOSTNAME:$PORT/$DATABASE?createDatabaseIfNotExist=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useSSL=false"
+        
+        String database = url;
+        
+        database = database.replace("jdbc:postgresql://"+hostname, "");
+        database = database.replace("jdbc:mysql://"+hostname, "");
+        //:3306/database or /database
+        
+        database = database.substring(database.indexOf("/")+1);
+        
+        if (database.contains("?")) {
+            return database.substring(0, database.indexOf("?")).trim();
+        }
+                               
+        return database;        
+    }
+
+    public Map<String, String> getLoadedConfigurationFileMap() {
+        return mapConfigFile;
+    }       
+    
+    private void messageBox(String title, String message) {
+        JOptionPane.showMessageDialog(this, message, title, JOptionPane.INFORMATION_MESSAGE);
     }
 }
