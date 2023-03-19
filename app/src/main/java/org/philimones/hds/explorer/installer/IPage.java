@@ -5,6 +5,7 @@
 package org.philimones.hds.explorer.installer;
 
 import java.awt.Component;
+import java.io.File;
 import java.util.Map;
 
 /**
@@ -16,6 +17,8 @@ public interface IPage {
     ValidationResult validatePage();
     
     Map<String, String> exportValues();
+
+    void setTemporaryDirectory(File temporaryDirectory);
     
     enum ValidationType {
         ERROR, SUCCESS

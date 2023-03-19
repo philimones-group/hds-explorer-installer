@@ -5,6 +5,7 @@
 package org.philimones.hds.explorer.installer;
 
 import java.awt.Component;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -40,6 +41,11 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
         initComponents();        
         initListeners();
         this.mapConfigFile = new LinkedHashMap<>();
+    }
+
+    @Override
+    public void setTemporaryDirectory(File temporaryDirectory) {
+
     }
     
     private void initListeners() {
@@ -127,6 +133,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
         cboSystemCodeGen = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
 
+        setMaximumSize(new java.awt.Dimension(701, 473));
         setMinimumSize(new java.awt.Dimension(701, 473));
         setPreferredSize(new java.awt.Dimension(701, 473));
 
@@ -156,7 +163,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTitleInfo1))
-                .addContainerGap(181, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -169,7 +176,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                         .addGap(0, 0, 0)
                         .addComponent(lblTitleInfo1))
                     .addComponent(lblIcon))
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         panelSettings.setBorder(javax.swing.BorderFactory.createTitledBorder("Parameters"));
@@ -203,7 +210,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
 
         jLabel2.setText("Password");
 
-        txtEmailPassword.setText("jPasswordField1");
+        txtEmailPassword.setText("test");
 
         javax.swing.GroupLayout panelDbmsLayout = new javax.swing.GroupLayout(panelDbms);
         panelDbms.setLayout(panelDbmsLayout);
@@ -285,7 +292,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                             .addComponent(txtMinHeadAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(58, 58, 58)
                         .addComponent(panelDbms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
             .addComponent(jSeparator1)
         );
         panelSettingsLayout.setVerticalGroup(
@@ -333,13 +340,11 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(3, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(panelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -454,28 +459,31 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     }
     
     private void updateParametersFromConfig() {
-        String respath = mapConfigFile.get(KEY_SYSTEM_PATH);
-        String syslang = mapConfigFile.get(KEY_SYS_LANG);
-        String codegen = mapConfigFile.get(KEY_SYS_CODEGEN);
-        String minfath = mapConfigFile.get(KEY_MIN_FATHER_AGE);
-        String minmoth = mapConfigFile.get(KEY_MIN_MOTHER_AGE);
-        String minspou = mapConfigFile.get(KEY_MIN_SPOUSE_AGE);
-        String minhead = mapConfigFile.get(KEY_MIN_HEAD_AGE);
-        String mailcon = mapConfigFile.get(KEY_MAIL_CONFIG);
-        String emailad = mapConfigFile.get(KEY_EMAIL);
-        String passwrd = mapConfigFile.get(KEY_EMAIL_PASSWORD);
-                
-        
-        txtSystemPath.setText(respath);
-        cboSystemLanguage.setSelectedIndex(getSystemLanguageIndex(syslang));
-        cboSystemCodeGen.setSelectedIndex(getCodeGeneratorIndex(codegen));
-        txtMinFatherAge.setText(minfath);
-        txtMinMotherAge.setText(minmoth);
-        txtMinSpouseAge.setText(minspou);
-        txtMinHeadAge.setText(minhead);
-        chkUseGmail.setSelected(mailcon.equals("true"));
-        txtEmail.setText(emailad);
-        txtEmailPassword.setText(passwrd);
+
+        if (!this.mapConfigFile.isEmpty()) {
+            String respath = mapConfigFile.get(KEY_SYSTEM_PATH);
+            String syslang = mapConfigFile.get(KEY_SYS_LANG);
+            String codegen = mapConfigFile.get(KEY_SYS_CODEGEN);
+            String minfath = mapConfigFile.get(KEY_MIN_FATHER_AGE);
+            String minmoth = mapConfigFile.get(KEY_MIN_MOTHER_AGE);
+            String minspou = mapConfigFile.get(KEY_MIN_SPOUSE_AGE);
+            String minhead = mapConfigFile.get(KEY_MIN_HEAD_AGE);
+            String mailcon = mapConfigFile.get(KEY_MAIL_CONFIG);
+            String emailad = mapConfigFile.get(KEY_EMAIL);
+            String passwrd = mapConfigFile.get(KEY_EMAIL_PASSWORD);
+
+
+            txtSystemPath.setText(respath);
+            cboSystemLanguage.setSelectedIndex(getSystemLanguageIndex(syslang));
+            cboSystemCodeGen.setSelectedIndex(getCodeGeneratorIndex(codegen));
+            txtMinFatherAge.setText(minfath);
+            txtMinMotherAge.setText(minmoth);
+            txtMinSpouseAge.setText(minspou);
+            txtMinHeadAge.setText(minhead);
+            chkUseGmail.setSelected(mailcon.equals("true"));
+            txtEmail.setText(emailad);
+            txtEmailPassword.setText(passwrd);
+        }
         
     }
 }

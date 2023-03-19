@@ -33,29 +33,29 @@
                   <Component id="label4mainsite" min="-2" max="-2" attributes="0"/>
                   <Component id="label5servesite" min="-2" max="-2" attributes="0"/>
                   <Component id="label6mobilesite" min="-2" max="-2" attributes="0"/>
-                  <Component id="label3Info" alignment="0" min="-2" pref="438" max="-2" attributes="0"/>
+                  <Component id="jLabel2" alignment="0" min="-2" pref="438" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="15" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
+          <Component id="jLabel1" alignment="0" pref="473" max="32767" attributes="0"/>
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Component id="label1setup" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="label2welcome" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-              <Component id="label3Info" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+              <Component id="jLabel2" min="-2" pref="170" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="label4mainsite" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
               <Component id="label5servesite" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="label6mobilesite" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="91" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -92,19 +92,6 @@
           <Font name="SansSerif" size="13" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Welcome to the HDS-Explorer Server Setup wizard"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JEditorPane" name="label3Info">
-      <Properties>
-        <Property name="editable" type="boolean" value="false"/>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-            <EmptyBorder/>
-          </Border>
-        </Property>
-        <Property name="contentType" type="java.lang.String" value="text/html" noResource="true"/>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;   &lt;head&gt;&lt;/head&gt;   &lt;body&gt;    HDS-Explorer Server application provides the data repository for  a Health and Demographics Surveillance system and data management tool   for data collection for program or research implementation.    &lt;br&gt;&lt;br&gt; This setup wizard will help you customize the HDS-Explorer parameters to meet your HDSS Site,  after it finishes a Java WAR archive will be generated with the defined parameters.  &lt;br&gt; &lt;br&gt; &lt;b&gt;More information about HDS-Explorer&lt;/b&gt;&lt;br&gt;&lt;br&gt;   &lt;/body&gt; &lt;/html&gt; "/>
-        <Property name="focusable" type="boolean" value="false"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="label4mainsite">
@@ -145,6 +132,15 @@
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel2">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="SansSerif" size="13" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;   &lt;head&gt;&lt;/head&gt;   &lt;body&gt;    HDS-Explorer Server application provides the data repository for  a Health and Demographics Surveillance system and data management tool   for data collection for program or research implementation.    &lt;br&gt;&lt;br&gt; This setup wizard will help you customize the HDS-Explorer parameters to meet your HDSS Site,  after it finishes a Java WAR archive will be generated with the defined parameters.  &lt;br&gt; &lt;br&gt; &lt;b&gt;More information about HDS-Explorer&lt;/b&gt;&lt;br&gt;&lt;br&gt;   &lt;/body&gt; &lt;/html&gt; "/>
+        <Property name="verticalAlignment" type="int" value="1"/>
       </Properties>
     </Component>
   </SubComponents>

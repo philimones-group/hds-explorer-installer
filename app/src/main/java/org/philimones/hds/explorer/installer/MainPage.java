@@ -6,12 +6,10 @@ package org.philimones.hds.explorer.installer;
 
 import java.awt.GridLayout;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -37,14 +35,18 @@ public class MainPage extends javax.swing.JFrame implements InstallListener {
     private PanelGoodbye pageGoodbye;
     
     private String reviewString;
-    
+
+    private File temporaryDirectory;
+
     /**
      * Creates new form MainPage
      */
     public MainPage() {
         initComponents();
         setLocationRelativeTo(null);
-        
+
+        this.temporaryDirectory = createTemporaryDir();
+
         initPages();
         gotoWelcomePage();
     }
@@ -58,6 +60,26 @@ public class MainPage extends javax.swing.JFrame implements InstallListener {
         this.pageGoodbye = new PanelGoodbye();
         
         this.pageInstall.setInstallListener(this);
+
+        this.pageWelcome.setTemporaryDirectory(this.temporaryDirectory);
+        this.pageDatabase.setTemporaryDirectory(this.temporaryDirectory);
+        this.pageParameters.setTemporaryDirectory(this.temporaryDirectory);
+        this.pageReview.setTemporaryDirectory(this.temporaryDirectory);
+        this.pageInstall.setTemporaryDirectory(this.temporaryDirectory);
+        this.pageGoodbye.setTemporaryDirectory(this.temporaryDirectory);
+    }
+
+    private File createTemporaryDir() {
+        try {
+            //setConfiguringText("Creating Temporary Directory");
+            Path path = Files.createTempDirectory("hdsInstaller");
+            return path.toFile();
+
+        } catch (IOException ex) {
+            Logger.getLogger(PanelInstall.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
     }
     
     private void createReviewInfo() {
@@ -102,9 +124,9 @@ public class MainPage extends javax.swing.JFrame implements InstallListener {
         String txt = "";
         
         try {
-            File appConfFile = new File(getClass().getResource("/samples/app-config.yml").toURI());
+            InputStream fileStream = getClass().getResourceAsStream("/samples/app-config.yml");
             
-            BufferedReader reader = new BufferedReader(new FileReader(appConfFile));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fileStream));
             
             
             String line = null;
@@ -115,12 +137,10 @@ public class MainPage extends javax.swing.JFrame implements InstallListener {
                 if (line != null) {
                     txt += line + "\n";
                 }
-                
+
             } while (line != null);
             
             
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -437,7 +457,7 @@ public class MainPage extends javax.swing.JFrame implements InstallListener {
                     .addComponent(btBack, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btNext, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(bottomPanel, java.awt.BorderLayout.PAGE_END);

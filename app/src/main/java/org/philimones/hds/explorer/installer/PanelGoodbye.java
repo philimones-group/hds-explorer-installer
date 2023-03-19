@@ -6,6 +6,7 @@ package org.philimones.hds.explorer.installer;
 
 import java.awt.Desktop;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -24,6 +25,11 @@ public class PanelGoodbye extends javax.swing.JPanel implements IPage {
      */
     public PanelGoodbye() {
         initComponents();
+    }
+
+    @Override
+    public void setTemporaryDirectory(File temporaryDirectory) {
+
     }
 
     private void openUrl(URI uri) {

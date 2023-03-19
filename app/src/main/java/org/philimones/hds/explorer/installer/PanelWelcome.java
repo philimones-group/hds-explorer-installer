@@ -4,16 +4,15 @@
  */
 package org.philimones.hds.explorer.installer;
 
-import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.UIDefaults;
 
 /**
  *
@@ -26,14 +25,10 @@ public class PanelWelcome extends javax.swing.JPanel implements IPage {
      */
     public PanelWelcome() {
         initComponents();
-        
-        Color bgColor = new Color(214, 217, 223);
-        
-        UIDefaults defaults = new UIDefaults();
-        defaults.put("EditorPane[Enabled].backgroundPainter", bgColor);
-        label3Info.putClientProperty("Nimbus.Overrides", defaults);
-        label3Info.putClientProperty("Nimbus.Overrides.InheritDefaults", true);
-        label3Info.setBackground(bgColor);
+    }
+
+    @Override
+    public void setTemporaryDirectory(File temporaryDirectory) {
 
     }
 
@@ -59,10 +54,10 @@ public class PanelWelcome extends javax.swing.JPanel implements IPage {
         jLabel1 = new javax.swing.JLabel();
         label1setup = new javax.swing.JLabel();
         label2welcome = new javax.swing.JLabel();
-        label3Info = new javax.swing.JEditorPane();
         label4mainsite = new javax.swing.JLabel();
         label5servesite = new javax.swing.JLabel();
         label6mobilesite = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(701, 473));
         setPreferredSize(new java.awt.Dimension(701, 473));
@@ -78,12 +73,6 @@ public class PanelWelcome extends javax.swing.JPanel implements IPage {
 
         label2welcome.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
         label2welcome.setText("Welcome to the HDS-Explorer Server Setup wizard");
-
-        label3Info.setEditable(false);
-        label3Info.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        label3Info.setContentType("text/html"); // NOI18N
-        label3Info.setText("<html>   <head></head>   <body>    HDS-Explorer Server application provides the data repository for  a Health and Demographics Surveillance system and data management tool   for data collection for program or research implementation.    <br><br> This setup wizard will help you customize the HDS-Explorer parameters to meet your HDSS Site,  after it finishes a Java WAR archive will be generated with the defined parameters.  <br> <br> <b>More information about HDS-Explorer</b><br><br>   </body> </html> ");
-        label3Info.setFocusable(false);
 
         label4mainsite.setForeground(java.awt.Color.blue);
         label4mainsite.setText("<html><u>https://www.hds-explorer.org </u></html>");
@@ -108,6 +97,10 @@ public class PanelWelcome extends javax.swing.JPanel implements IPage {
         label6mobilesite.setText("<html><u>HDS-Explorer Mobile source-code</u></html>");
         label6mobilesite.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
+        jLabel2.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel2.setText("<html>   <head></head>   <body>    HDS-Explorer Server application provides the data repository for  a Health and Demographics Surveillance system and data management tool   for data collection for program or research implementation.    <br><br> This setup wizard will help you customize the HDS-Explorer parameters to meet your HDSS Site,  after it finishes a Java WAR archive will be generated with the defined parameters.  <br> <br> <b>More information about HDS-Explorer</b><br><br>   </body> </html> ");
+        jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -121,26 +114,26 @@ public class PanelWelcome extends javax.swing.JPanel implements IPage {
                     .addComponent(label4mainsite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(label5servesite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(label6mobilesite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(label3Info, javax.swing.GroupLayout.PREFERRED_SIZE, 438, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 438, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 15, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(label1setup)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(label2welcome)
-                .addGap(40, 40, 40)
-                .addComponent(label3Info, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(label4mainsite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addComponent(label5servesite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(label6mobilesite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(91, 91, 91))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -169,9 +162,9 @@ public class PanelWelcome extends javax.swing.JPanel implements IPage {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel label1setup;
     private javax.swing.JLabel label2welcome;
-    private javax.swing.JEditorPane label3Info;
     private javax.swing.JLabel label4mainsite;
     private javax.swing.JLabel label5servesite;
     private javax.swing.JLabel label6mobilesite;

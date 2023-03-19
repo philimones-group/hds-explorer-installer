@@ -63,7 +63,12 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
         this.configFileChooser.setFileFilter(new FileNameExtensionFilter("HDS-Explorer YAML Config File", "yml"));
         this.configFileChooser.setAcceptAllFileFilterUsed(false);
     }
-    
+
+    @Override
+    public void setTemporaryDirectory(File temporaryDirectory) {
+
+    }
+
     private String getUrl() {
         
         if (chkMySqlDb.isSelected()) {
@@ -129,6 +134,7 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
         txtConfigFile = new javax.swing.JTextField();
         btLoadConfigFile = new javax.swing.JButton();
 
+        setMaximumSize(new java.awt.Dimension(701, 473));
         setMinimumSize(new java.awt.Dimension(701, 473));
         setPreferredSize(new java.awt.Dimension(701, 473));
 
@@ -252,8 +258,8 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(panelSettingsLayout.createSequentialGroup()
                         .addComponent(lblPasswordConfirm)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtPasswordConfirm))
+                        .addGap(15, 15, 15)
+                        .addComponent(txtPasswordConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelSettingsLayout.createSequentialGroup()
                         .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblHostname)
@@ -268,7 +274,7 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
                             .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtHostname, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelSettingsLayout.setVerticalGroup(
             panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -297,7 +303,7 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPasswordConfirm)
                     .addComponent(txtPasswordConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(94, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -345,7 +351,7 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addComponent(panelDbms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)

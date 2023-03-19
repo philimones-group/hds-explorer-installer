@@ -3,8 +3,10 @@
  */
 package org.philimones.hds.explorer.installer;
 
+import java.awt.Toolkit;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 
 public class App {
 
@@ -17,15 +19,15 @@ public class App {
     }
 
     public static void setLookAndFeel() {
+        Toolkit.getDefaultToolkit().setDynamicLayout(true);
+        System.setProperty("sun.awt.noerasebackground", "true");
+        JFrame.setDefaultLookAndFeelDecorated(true);
+        JDialog.setDefaultLookAndFeelDecorated(true);
+
         try {
-            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            // If Nimbus is not available, you can set the GUI to another look and feel.
-       }
+            UIManager.setLookAndFeel("net.sf.tinylaf.TinyLookAndFeel");
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

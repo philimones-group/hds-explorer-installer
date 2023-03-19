@@ -43,7 +43,8 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
     
     static final String MYSQL_DRIVER_VALUE = "com.mysql.jdbc.Driver";
     static final String POSTGRES_DRIVER_VALUE = "org.postgresql.Driver";
-    
+
+    private File temporaryDirectory;
     private File hdsWarFile;
     private File outputDirectory;    
     private Map<String, String> appConfigMap;
@@ -61,6 +62,11 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
         initComponents();
         readCreateFiles();
         initListeners();
+    }
+
+    @Override
+    public void setTemporaryDirectory(File temporaryDirectory) {
+        this.temporaryDirectory = temporaryDirectory;
     }
     
     private void initListeners() {
@@ -292,10 +298,10 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
         
         
         //0. create a temporary directory - and extract war file to it
-        File tempDir = createTemporaryDir();
+        File tempDir = this.temporaryDirectory; //createTemporaryDir();
         delay(500);
         
-        File tempWarFile = copyWarToTemporaryDir(tempDir);
+        File tempWarFile = this.hdsWarFile; //copyWarToTemporaryDir(tempDir); - its already in temporary directory
         delay(500);
         
         //1. create file app-config.yml and insert content
@@ -430,7 +436,7 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
         setConfiguringText("Injecting app-config.yml file into HDS-Explorer WAR File");
                  
         System.out.println("conf: "+fileToInject.getAbsolutePath());
-        System.out.println("url: "+warFile.toURI().toString());
+        System.out.println("url: "+warFile.toString());
 
         File destWarFile = createNewFile(destinationDirectory, warFile.getName());
         

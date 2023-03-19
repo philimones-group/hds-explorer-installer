@@ -6,8 +6,12 @@ package org.philimones.hds.explorer.installer;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.jar.JarEntry;
@@ -28,6 +32,7 @@ public class PanelReviewOutput extends javax.swing.JPanel implements IPage {
     private JFileChooser outputDirChooser;
     private File selectedOutputDir;
     private File selectedWarFile;
+    private File temporaryDirectory;
     
     /**
      * Creates new form PanelDatabase
@@ -35,6 +40,11 @@ public class PanelReviewOutput extends javax.swing.JPanel implements IPage {
     public PanelReviewOutput() {
         initComponents();
         init();        
+    }
+
+    @Override
+    public void setTemporaryDirectory(File temporaryDirectory) {
+        this.temporaryDirectory = temporaryDirectory;
     }
 
     private void init() {
@@ -83,6 +93,7 @@ public class PanelReviewOutput extends javax.swing.JPanel implements IPage {
         txtOutputDir = new javax.swing.JTextField();
         lblHostname = new javax.swing.JLabel();
 
+        setMaximumSize(new java.awt.Dimension(701, 473));
         setMinimumSize(new java.awt.Dimension(701, 473));
         setPreferredSize(new java.awt.Dimension(701, 473));
 
@@ -114,7 +125,7 @@ public class PanelReviewOutput extends javax.swing.JPanel implements IPage {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTitleInfo1, javax.swing.GroupLayout.PREFERRED_SIZE, 602, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -127,12 +138,20 @@ public class PanelReviewOutput extends javax.swing.JPanel implements IPage {
                         .addGap(0, 0, 0)
                         .addComponent(lblTitleInfo1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblIcon))
-                .addGap(0, 8, Short.MAX_VALUE))
+                .addGap(0, 2, Short.MAX_VALUE))
         );
 
+        jScrollPane1.setMaximumSize(new java.awt.Dimension(675, 282));
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(675, 282));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(675, 282));
+
+        txtReviewConfig.setMaximumSize(new java.awt.Dimension(675, 2147483647));
+        txtReviewConfig.setMinimumSize(new java.awt.Dimension(675, 22));
+        txtReviewConfig.setPreferredSize(new java.awt.Dimension(675, 22));
         jScrollPane1.setViewportView(txtReviewConfig);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jPanel2.setMaximumSize(new java.awt.Dimension(675, 81));
 
         jLabel1.setText("Deploy File:");
 
@@ -192,24 +211,27 @@ public class PanelReviewOutput extends javax.swing.JPanel implements IPage {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblHostname)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(txtWarLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(txtWarFilename, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtWarVersion))
-                    .addComponent(txtOutputDir, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btSelectDir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btSelectWar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(txtWarLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtWarFilename, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)
+                        .addGap(6, 6, 6)
+                        .addComponent(txtWarVersion, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
+                        .addComponent(btSelectWar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(txtOutputDir, javax.swing.GroupLayout.PREFERRED_SIZE, 465, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
+                        .addComponent(btSelectDir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(13, 13, 13))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -235,17 +257,14 @@ public class PanelReviewOutput extends javax.swing.JPanel implements IPage {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 701, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 701, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addGap(5, 5, 5))))
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -254,7 +273,7 @@ public class PanelReviewOutput extends javax.swing.JPanel implements IPage {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -321,22 +340,27 @@ public class PanelReviewOutput extends javax.swing.JPanel implements IPage {
     }
     
     private void retrieveInternalWar() {
-        URL url = getClass().getResource("/wars");
+        //URL url = getClass().getResource("/wars");
         
         File warFile = null;
-        
+
+        //copy current war to temporary directory
+
+
         try {
-            File dir = new File(url.toURI());
-                            
-            for (File file : dir.listFiles()) {                                
-                if (file.getName().toLowerCase().endsWith(".war")) {
-                    warFile = file;
-                }
-            }
-            
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(PanelReviewOutput.class.getName()).log(Level.SEVERE, null, ex);
+
+            InputStream warInputStream = getClass().getResourceAsStream("/wars/hds-explorer-server.war");
+
+            File newFile = new File(temporaryDirectory.getAbsolutePath() + "/hds-explorer-server.war");
+
+            long result = Files.copy(warInputStream, newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            warFile = newFile;
+
+        } catch (IOException ex) {
+            Logger.getLogger(PanelInstall.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         
         this.selectedWarFile = warFile;
     }

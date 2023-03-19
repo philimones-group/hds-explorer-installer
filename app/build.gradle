@@ -26,6 +26,8 @@ dependencies {
     // https://mvnrepository.com/artifact/org.zeroturnaround/zt-zip
     implementation 'org.zeroturnaround:zt-zip:1.8'
 
+    // https://mvnrepository.com/artifact/net.sf.tinylaf/tinylaf
+    implementation 'net.sf.tinylaf:tinylaf:1.4.0'
 }
 
 application {
@@ -36,4 +38,16 @@ application {
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+
+jar {
+    archiveBaseName = "hds-explorer-installer-1.0.0_build_220"
+    manifest {
+        attributes(
+          'Main-Class': 'org.philimones.hds.explorer.installer.App'
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
