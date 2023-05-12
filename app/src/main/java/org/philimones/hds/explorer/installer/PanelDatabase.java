@@ -26,10 +26,10 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
 
     static final String DRIVER_POSTGRES = "org.postgresql.Driver";
     static final String DIALECT_POSTGRES = "org.hibernate.dialect.PostgreSQL94Dialect";
-    static final String DRIVER_MYSQL = "com.mysql.jdbc.Driver";    
-    static final String DIALECT_MYSQL = "org.hibernate.dialect.MySQL5InnoDBDialect";
+    static final String DRIVER_MYSQL = "com.mysql.cj.jdbc.Driver";    
+    static final String DIALECT_MYSQL = "org.hibernate.dialect.MySQL8Dialect";
     static final String URL_POSTGRES = "jdbc:postgresql://$HOSTNAME:$PORT/$DATABASE";
-    static final String URL_MYSQL = "jdbc:mysql://$HOSTNAME:$PORT/$DATABASE?createDatabaseIfNotExist=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useSSL=false";
+    static final String URL_MYSQL = "jdbc:mysql://$HOSTNAME:$PORT/$DATABASE?createDatabaseIfNotExist=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true";
     
     static final String KEY_DATASOURCE_POOLED = "dataSource.pooled";
     static final String KEY_DATASOURCE_DRIVER = "dataSource.driverClassName";

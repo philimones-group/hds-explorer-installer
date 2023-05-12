@@ -26,15 +26,17 @@
         <p>Lets consider that we are in a Linux distribution and Tomcat Server that was manually installed in the path: /opt/tomcat.</p>
         <p><strong>1. Goto the output directory where the installer created the files</strong><br>
             <code>cd $OUTPUT_DIR</code></p>
-        <p><strong>2. Configure the $DBMS Database Access (import the file <em><strong>$CREATE_USER_DB</strong></em> to $DBMS database)</strong><br>
+        <p><strong>2. Copy the the files (hds-explorer-server.war and $CREATE_USER_DB) to the Server where tomcat is installed (In Linux or WSL you can you SSH Copy commands to copy the files or an equivalent in Windows)</strong><br>
+            <code>*Use the appropriate way for you to copy those files*</code></p>
+        <p><strong>3. Configure the $DBMS Database Access (import the file <em><strong>$CREATE_USER_DB</strong></em> to $DBMS database)</strong><br>
             <code>$DB_CREATE_STATEMENT</code></p>
-        <p><strong>3. Create the hds-explorer resources directory</strong><br>
+        <p><strong>4. Create the hds-explorer resources directory</strong><br>
             <code>sudo mkdir $RESOURCES_DIR</code></p>
-        <p><strong>4. Grant access to tomcat user to the folder $RESOURCES_DIR</strong><br>
+        <p><strong>5. Grant access to tomcat user to the folder $RESOURCES_DIR</strong><br>
             <code>sudo chown -R tomcat:tomcat $RESOURCES_DIR</code></p>
-        <p><strong>5. Copy the war file to $TOMCAT/webapps</strong><br>
+        <p><strong>6. Copy the war file to $TOMCAT/webapps</strong><br>
             <code>cp $WAR_FILENAME /opt/tomcat/webapps</code></p>
-        <p><strong>6. Start the webserver or we can copy the war file while the server is running and it will be deployed onfly.</strong><br>
+        <p><strong>7. Start the webserver or we can copy the war file while the server is running and it will be deployed onfly.</strong><br>
             <code>/opt/tomcat/bin/startup.sh</code></p>
         <br>
         <br>

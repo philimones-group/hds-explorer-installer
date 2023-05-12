@@ -41,7 +41,7 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
     
     static final String KEY_SYSTEM_PATH = "hds.explorer.system.path";
     
-    static final String MYSQL_DRIVER_VALUE = "com.mysql.jdbc.Driver";
+    static final String MYSQL_DRIVER_VALUE = "com.mysql.cj.jdbc.Driver";
     static final String POSTGRES_DRIVER_VALUE = "org.postgresql.Driver";
 
     private File temporaryDirectory;
