@@ -299,26 +299,26 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
         
         //0. create a temporary directory - and extract war file to it
         File tempDir = this.temporaryDirectory; //createTemporaryDir();
-        delay(500);
+        //delay(500);
         
         File tempWarFile = this.hdsWarFile; //copyWarToTemporaryDir(tempDir); - its already in temporary directory
-        delay(500);
+        //delay(500);
         
         //1. create file app-config.yml and insert content
         File appConfigFile = createAppConfigFile(tempDir);
-        delay(300);
+        //delay(300);
         
         //2. create database file and insert content
         File databaseFile = createDatabaseFile(tempDir);
-        delay(400);
+        //delay(400);
         
         //3. create README file and insert content
         File readmeFile = createReadmeFile(tempDir, databaseFile, tempWarFile);
-        delay(500);
+        //delay(500);
         
         //4. insert app-config.yml inside hds-explorer-server.war        
         injectFileToWar(tempWarFile, this.outputDirectory, appConfigFile, "WEB-INF/classes/app-config.yml");
-        delay(1000);
+        //delay(1000);
         
         //5. save the file hds-explorer-server.war, app-config.yml, create-database, REAME.txt in output directory
         setConfiguringText("Saving all created files in Output Directory");
@@ -326,7 +326,7 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
         copyFileToDirectory(this.outputDirectory, appConfigFile);
         copyFileToDirectory(this.outputDirectory, databaseFile);
         copyFileToDirectory(this.outputDirectory, readmeFile);
-        delay(500);
+        //delay(500);
         
         finishInstall();        
     }

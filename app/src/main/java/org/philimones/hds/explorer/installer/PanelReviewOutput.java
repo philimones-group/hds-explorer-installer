@@ -446,6 +446,10 @@ public class PanelReviewOutput extends javax.swing.JPanel implements IPage {
     }
 
     private void selectOutputDirectory() {
+        
+        if (PanelDatabase.LOADED_CONFIG_PATH != null) {
+            this.outputDirChooser.setCurrentDirectory(PanelDatabase.LOADED_CONFIG_PATH);
+        }
         int result = this.outputDirChooser.showOpenDialog(this);
         
         if (result == JFileChooser.APPROVE_OPTION) {

@@ -40,7 +40,9 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
     static final String KEY_DATASOURCE_HOSTNAME = "dataSource.hostname";
     static final String KEY_DATASOURCE_DATABASE = "dataSource.database";
     
-    static final String KEY_SYSTEM_PATH = "hds.explorer.system.path"; 
+    static final String KEY_SYSTEM_PATH = "hds.explorer.system.path";
+    
+    static File LOADED_CONFIG_PATH = null;
     
     private JFileChooser configFileChooser;
     private Map<String, String> mapConfigFile;
@@ -499,6 +501,8 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
         
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedConfigFile = this.configFileChooser.getSelectedFile();
+            
+            LOADED_CONFIG_PATH = selectedConfigFile.getParentFile();
             
             try {
                 //validate yaml file
