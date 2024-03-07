@@ -31,6 +31,10 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     static final String KEY_EMAIL = "grails.mail.username";
     static final String KEY_EMAIL_PASSWORD = "grails.mail.password";
     
+    static List<String> codeGeneratorList = Arrays.asList("org.philimone.hds.explorer.server.settings.generator.DefaultCodeGenerator", 
+                                                          "org.philimone.hds.explorer.server.settings.generator.DefaultSimpleCodeGenerator",
+                                                          "org.philimone.hds.explorer.server.settings.generator.CompoundSimpleCodeGenerator");
+    
     private Map<String, String> mapConfigFile;
     
     /**
@@ -78,11 +82,9 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
         return langs[i];
     }
     
-    private String getCodeGenerator() {
-        String[] cgens = new String[] { "org.philimone.hds.explorer.server.settings.generator.DefaultCodeGenerator", 
-                                        "org.philimone.hds.explorer.server.settings.generator.DefaultSimpleCodeGenerator"};
+    private String getCodeGenerator() {        
         int i = cboSystemCodeGen.getSelectedIndex();
-        return cgens[i];
+        return codeGeneratorList.get(i);
     }
     
     private int getSystemLanguageIndex(String value) {        
@@ -91,9 +93,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     }
     
     private int getCodeGeneratorIndex(String value) {
-        
-        List<String> list = Arrays.asList("org.philimone.hds.explorer.server.settings.generator.DefaultCodeGenerator", "org.philimone.hds.explorer.server.settings.generator.DefaultSimpleCodeGenerator");
-        return list.indexOf(value);
+        return codeGeneratorList.indexOf(value);
     }
     
     /**
@@ -209,7 +209,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
 
         jLabel2.setText("Password");
 
-        txtEmailPassword.setText("test");
+        txtEmailPassword.setText("jPasswordField1");
 
         javax.swing.GroupLayout panelDbmsLayout = new javax.swing.GroupLayout(panelDbms);
         panelDbms.setLayout(panelDbmsLayout);
@@ -258,7 +258,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
 
         lblPort1.setText("System Code Generator:");
 
-        cboSystemCodeGen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default Code Generator (Household no: TXUPF1001) (Region+User+001)", "Simple Code Generator   (Household no: TXU000001) (Region+000001)" }));
+        cboSystemCodeGen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default Code Generator (Household no: TXUPF1001) (Region+User+001)", "Simple Code Generator   (Household no: TXU000001) (Region+000001)", "Compound Based Code Scheme Generator (Household no: TXU000001001) (RegionCompound+001)" }));
 
         javax.swing.GroupLayout panelSettingsLayout = new javax.swing.GroupLayout(panelSettings);
         panelSettings.setLayout(panelSettingsLayout);
