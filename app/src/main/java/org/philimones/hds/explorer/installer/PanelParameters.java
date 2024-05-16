@@ -259,6 +259,11 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
         lblPort1.setText("System Code Generator:");
 
         cboSystemCodeGen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default Code Generator (Household no: TXUPF1001) (Region+User+001)", "Simple Code Generator   (Household no: TXU000001) (Region+000001)", "Compound Based Code Scheme Generator (Household no: TXU000001001) (RegionCompound+001)" }));
+        cboSystemCodeGen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboSystemCodeGenActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelSettingsLayout = new javax.swing.GroupLayout(panelSettings);
         panelSettings.setLayout(panelSettingsLayout);
@@ -358,6 +363,10 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     private void txtSystemPathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSystemPathActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSystemPathActionPerformed
+
+    private void cboSystemCodeGenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboSystemCodeGenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboSystemCodeGenActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
