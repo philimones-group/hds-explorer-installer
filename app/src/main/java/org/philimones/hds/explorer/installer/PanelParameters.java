@@ -35,7 +35,9 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     
     static List<String> codeGeneratorList = Arrays.asList("org.philimone.hds.explorer.server.settings.generator.DefaultCodeGenerator", 
                                                           "org.philimone.hds.explorer.server.settings.generator.DefaultSimpleCodeGenerator",
-                                                          "org.philimone.hds.explorer.server.settings.generator.CompoundSimpleCodeGenerator");
+                                                          "org.philimone.hds.explorer.server.settings.generator.CompoundSimpleCodeGenerator",
+                                                          "org.philimone.hds.explorer.server.settings.generator.KimpeseHdssCodeGenerator",
+                                                          "org.philimone.hds.explorer.server.settings.generator.NavrongoHdssCodeGenerator");
     static List<String> codeGeneratorRulesList = Arrays.asList("FILL_GAPS", "INCREMENT_LAST_CODE");
     
     private Map<String, String> mapConfigFile;
@@ -276,8 +278,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
 
         lblPort1.setText("System Code Generator:");
 
-        cboSystemCodeGen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default Code Generator (Household no: TXUPF1001) (Region+User+001)", "Simple Code Generator   (Household no: TXU000001) (Region+000001)", "Compound Based Code Scheme Generator (Household no: TXU000001001) (RegionCompound+001)" }));
-        cboSystemCodeGen.setSelectedIndex(1);
+        cboSystemCodeGen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default Code Generator (Household no: TXUPF1001) (Region+User+001)", "Simple Code Generator   (Household no: TXU000001) (Region+000001)", "Compound Based Code Scheme Generator (Household no: TXU000001001) (RegionCompound+001)", "Kimpese HDSS Code Scheme Generator - DRC  (Household no: A04A00101) (Concession+01)", "Navrongo HDSS Compound-Based Code Scheme Generator  (Household no: TXU000001001) (RegionCompound+001)" }));
         cboSystemCodeGen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboSystemCodeGenActionPerformed(evt);
