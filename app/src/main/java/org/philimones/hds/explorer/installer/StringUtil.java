@@ -22,6 +22,15 @@ public class StringUtil {
         }
     }
     
+    public static boolean isIntegerGreaterThan(String textValue, int value) {
+        try {
+            Integer result = Integer.valueOf(textValue);                        
+            return result > value;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+    
     public static boolean equals(char[] c1, char[] c2) {
         return new String(c1).equalsIgnoreCase(new String(c2));
     }

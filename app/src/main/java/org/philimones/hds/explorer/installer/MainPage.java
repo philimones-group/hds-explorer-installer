@@ -391,8 +391,8 @@ public class MainPage extends javax.swing.JFrame implements InstallListener {
         });
 
         mainPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        mainPanel.setMinimumSize(new java.awt.Dimension(701, 473));
-        mainPanel.setPreferredSize(new java.awt.Dimension(701, 473));
+        mainPanel.setMinimumSize(new java.awt.Dimension(701, 500));
+        mainPanel.setPreferredSize(new java.awt.Dimension(701, 500));
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -402,7 +402,7 @@ public class MainPage extends javax.swing.JFrame implements InstallListener {
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 469, Short.MAX_VALUE)
+            .addGap(0, 496, Short.MAX_VALUE)
         );
 
         getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);

@@ -520,23 +520,23 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
             type = ValidationType.ERROR;
             component = txtSystemPath;
             
-        } else if (!StringUtil.isInteger(txtMinFatherAge.getText())) {
-            errorMessage = "The Minimum Father age must be an integer value";
+        } else if (!StringUtil.isIntegerGreaterThan(txtMinFatherAge.getText(), 0)) {
+            errorMessage = "The Minimum Father age must be an integer value greater than zero";
             type = ValidationType.ERROR;
             component = txtMinFatherAge;
             
-        } else if (!StringUtil.isInteger(txtMinMotherAge.getText())) {
-            errorMessage = "The Minimum Mother age must be an integer value";
+        } else if (!StringUtil.isIntegerGreaterThan(txtMinMotherAge.getText(), 0)) {
+            errorMessage = "The Minimum Mother age must be an integer value greater than zero";
             type = ValidationType.ERROR;
             component = txtMinMotherAge;
             
-        } else if (!StringUtil.isInteger(txtMinSpouseAge.getText())) {
-            errorMessage = "The Minimum Spouse age must be an integer value";
+        } else if (!StringUtil.isIntegerGreaterThan(txtMinSpouseAge.getText(), 0)) {
+            errorMessage = "The Minimum Spouse age must be an integer value greater than zero";
             type = ValidationType.ERROR;
             component = txtMinSpouseAge;
             
-        } else if (!StringUtil.isInteger(txtMinHeadAge.getText())) {
-            errorMessage = "The Minimum Head of Household age must be an integer value";
+        } else if (!StringUtil.isIntegerGreaterThan(txtMinHeadAge.getText(), 0)) {
+            errorMessage = "The Minimum Head of Household age must be an integer value greater than zero";
             type = ValidationType.ERROR;
             component = txtMinHeadAge;
             
@@ -550,10 +550,20 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
             type = ValidationType.ERROR;
             component = txtEmailPassword;
             
+        } else if (!StringUtil.isIntegerGreaterThan(txtMaxAntepartumVisits.getText(), 0)) {
+            errorMessage = "The Maximum Number of Pregnancy Antepartum Visits must be an integer value greater than zero";
+            type = ValidationType.ERROR;
+            component = txtMaxPostpartumVisits;
+            
+        } else if (!StringUtil.isIntegerGreaterThan(txtMaxPostpartumVisits.getText(), 0)) {
+            errorMessage = "The Maximum Number of Pregnancy Postpartum Visits must be an integer value greater than zero";
+            type = ValidationType.ERROR;
+            component = txtMaxPostpartumVisits;
+            
         }        
         
         return new ValidationResult(type, errorMessage, component);
-    }
+    }    
 
     @Override
     public Map<String, String> exportValues() {
@@ -599,6 +609,8 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
             String emailad = mapConfigFile.get(KEY_EMAIL);
             String passwrd = mapConfigFile.get(KEY_EMAIL_PASSWORD);
 
+            if (StringUtil.isBlank(maxanvi)) maxanvi = "4";
+            if (StringUtil.isBlank(maxpovi)) maxpovi = "4";
 
             txtSystemPath.setText(respath);
             cboSystemLanguage.setSelectedIndex(getSystemLanguageIndex(syslang));
