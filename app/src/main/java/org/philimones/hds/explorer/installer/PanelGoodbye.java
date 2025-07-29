@@ -65,11 +65,11 @@ public class PanelGoodbye extends javax.swing.JPanel implements IPage {
         lblReadme = new javax.swing.JLabel();
         lblReadmeDesc = new javax.swing.JLabel();
 
-        setMinimumSize(new java.awt.Dimension(701, 473));
-        setPreferredSize(new java.awt.Dimension(701, 473));
+        setMinimumSize(new java.awt.Dimension(701, 500));
+        setPreferredSize(new java.awt.Dimension(701, 500));
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/nio splash.jpg"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/nio splash.png"))); // NOI18N
         jLabel1.setMaximumSize(new java.awt.Dimension(312, 469));
         jLabel1.setMinimumSize(new java.awt.Dimension(312, 469));
         jLabel1.setPreferredSize(new java.awt.Dimension(312, 469));
@@ -139,7 +139,7 @@ public class PanelGoodbye extends javax.swing.JPanel implements IPage {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(57, 57, 57)
                 .addComponent(label1setup)

@@ -59,11 +59,12 @@ public class PanelWelcome extends javax.swing.JPanel implements IPage {
         label6mobilesite = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
-        setMinimumSize(new java.awt.Dimension(701, 473));
-        setPreferredSize(new java.awt.Dimension(701, 473));
+        setMinimumSize(new java.awt.Dimension(701, 500));
+        setName(""); // NOI18N
+        setPreferredSize(new java.awt.Dimension(701, 500));
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/nio splash.jpg"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/nio splash.png"))); // NOI18N
         jLabel1.setMaximumSize(new java.awt.Dimension(312, 469));
         jLabel1.setMinimumSize(new java.awt.Dimension(312, 469));
         jLabel1.setPreferredSize(new java.awt.Dimension(312, 469));
@@ -119,7 +120,7 @@ public class PanelWelcome extends javax.swing.JPanel implements IPage {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(label1setup)

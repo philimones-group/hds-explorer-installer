@@ -93,9 +93,9 @@ public class PanelReviewOutput extends javax.swing.JPanel implements IPage {
         txtOutputDir = new javax.swing.JTextField();
         lblHostname = new javax.swing.JLabel();
 
-        setMaximumSize(new java.awt.Dimension(701, 473));
-        setMinimumSize(new java.awt.Dimension(701, 473));
-        setPreferredSize(new java.awt.Dimension(701, 473));
+        setMaximumSize(new java.awt.Dimension(701, 500));
+        setMinimumSize(new java.awt.Dimension(701, 500));
+        setPreferredSize(new java.awt.Dimension(701, 500));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());

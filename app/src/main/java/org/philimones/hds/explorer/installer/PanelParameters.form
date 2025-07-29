@@ -3,14 +3,15 @@
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <Properties>
     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[701, 473]"/>
+      <Dimension value="[701, 500]"/>
     </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[701, 473]"/>
+      <Dimension value="[701, 500]"/>
     </Property>
     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[701, 473]"/>
+      <Dimension value="[701, 500]"/>
     </Property>
+    <Property name="requestFocusEnabled" type="boolean" value="false"/>
   </Properties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -30,8 +31,8 @@
           <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="panelSettings" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <Component id="panelSettings" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -39,8 +40,8 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="panelSettings" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="panelSettings" min="-2" pref="386" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -70,7 +71,7 @@
                       <Component id="lblTitle" min="-2" pref="230" max="-2" attributes="0"/>
                       <Component id="lblTitleInfo1" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="230" max="32767" attributes="0"/>
+                  <EmptySpace pref="211" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -136,10 +137,44 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+              <Component id="jSeparator1" alignment="0" max="32767" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="16" pref="16" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lblUsername" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblPassword" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblPasswordConfirm" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblPasswordConfirm1" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblPasswordConfirm2" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblPasswordConfirm3" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblPasswordConfirm4" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="txtMinHeadAge" min="-2" pref="52" max="-2" attributes="0"/>
+                                      <Component id="txtMinRespondentAge" min="-2" pref="52" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="panelDbms" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="txtMinFatherAge" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
+                                      <Component id="txtMaxAntepartumVisits" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
+                                      <Component id="txtMinMotherAge" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
+                                      <Component id="txtMinSpouseAge" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
+                                      <Component id="txtMaxPostpartumVisits" min="-2" pref="52" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="lblHostname" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="lblPort" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -149,42 +184,19 @@
                           <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="cboSystemLanguage" alignment="0" min="-2" pref="226" max="-2" attributes="0"/>
-                              <Component id="cboSystemCodeGen" alignment="0" pref="455" max="32767" attributes="0"/>
+                              <Component id="cboSystemCodeGen" alignment="0" pref="0" max="32767" attributes="0"/>
                               <Component id="txtSystemPath" alignment="0" max="32767" attributes="0"/>
-                              <Component id="cboSystemCodeGenIcr" alignment="0" max="32767" attributes="0"/>
+                              <Component id="cboSystemCodeGenIcr" alignment="0" min="-2" pref="455" max="-2" attributes="0"/>
                           </Group>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lblUsername" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblPassword" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblPasswordConfirm" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblPasswordConfirm1" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblPasswordConfirm2" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="txtMinFatherAge" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
-                              <Component id="txtMinMotherAge" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
-                              <Component id="txtMinSpouseAge" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
-                              <Component id="txtMinHeadAge" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
-                              <Component id="txtMinRespondentAge" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace pref="62" max="32767" attributes="0"/>
-                          <Component id="panelDbms" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                          <EmptySpace min="11" pref="12" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
               </Group>
-              <Component id="jSeparator1" alignment="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lblHostname" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtSystemPath" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -204,35 +216,53 @@
                       <Component id="lblPort2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="cboSystemCodeGenIcr" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
-                  <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jSeparator1" min="-2" pref="2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="panelDbms" min="-2" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                          <Component id="panelDbms" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="lblUsername" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txtMinFatherAge" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="lblPassword" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtMinMotherAge" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="txtMinSpouseAge" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblPasswordConfirm" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="txtMinHeadAge" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblPasswordConfirm1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="txtMinRespondentAge" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblPasswordConfirm2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="lblPassword" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtMinMotherAge" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="txtMinSpouseAge" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="lblPasswordConfirm1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtMinHeadAge" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="lblPasswordConfirm2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtMinRespondentAge" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="lblPasswordConfirm3" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtMaxAntepartumVisits" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="lblPasswordConfirm4" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtMaxPostpartumVisits" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
+                                  <Component id="lblPasswordConfirm" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                   </Group>
@@ -447,7 +477,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtMinRespondentAge">
           <Properties>
-            <Property name="text" type="java.lang.String" value="12"/>
+            <Property name="text" type="java.lang.String" value="4"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtMinRespondentAgeActionPerformed"/>
@@ -457,6 +487,29 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Minimum Respondent Age:"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblPasswordConfirm3">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Maximum Antepartum Visits:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblPasswordConfirm4">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Maximum Postpartum Visits:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtMaxPostpartumVisits">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="4"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtMaxAntepartumVisits">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="4"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtMaxAntepartumVisitsActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

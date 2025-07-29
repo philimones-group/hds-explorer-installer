@@ -25,6 +25,8 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     static final String KEY_MIN_HEAD_AGE = "hds.explorer.constraints.head.age.min";
     static final String KEY_MIN_SPOUSE_AGE = "hds.explorer.constraints.spouse.age.min";
     static final String KEY_MIN_RESPONDENT_AGE = "hds.explorer.constraints.respondent.age.min";
+    static final String KEY_MAX_ANTEPARTUM_VISITS = "hds.explorer.constraints.pregnancy.antepartum.visits.max";
+    static final String KEY_MAX_POSTPARTUM_VISITS = "hds.explorer.constraints.pregnancy.postpartum.visits.max";
     static final String KEY_GENDER_CHECK = "hds.explorer.constraints.gender.checking";
     static final String KEY_SYS_LANG = "hds.explorer.system.language";
     static final String KEY_SYS_CODEGEN = "hds.explorer.system.codegenerator"; //"org.philimone.hds.explorer.server.settings.generator.DefaultCodeGenerator"
@@ -150,10 +152,15 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
         cboSystemCodeGenIcr = new javax.swing.JComboBox<>();
         txtMinRespondentAge = new javax.swing.JTextField();
         lblPasswordConfirm2 = new javax.swing.JLabel();
+        lblPasswordConfirm3 = new javax.swing.JLabel();
+        lblPasswordConfirm4 = new javax.swing.JLabel();
+        txtMaxPostpartumVisits = new javax.swing.JTextField();
+        txtMaxAntepartumVisits = new javax.swing.JTextField();
 
-        setMaximumSize(new java.awt.Dimension(701, 473));
-        setMinimumSize(new java.awt.Dimension(701, 473));
-        setPreferredSize(new java.awt.Dimension(701, 473));
+        setMaximumSize(new java.awt.Dimension(701, 500));
+        setMinimumSize(new java.awt.Dimension(701, 500));
+        setPreferredSize(new java.awt.Dimension(701, 500));
+        setRequestFocusEnabled(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -181,7 +188,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTitleInfo1))
-                .addContainerGap(230, Short.MAX_VALUE))
+                .addContainerGap(211, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -295,7 +302,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
             }
         });
 
-        txtMinRespondentAge.setText("12");
+        txtMinRespondentAge.setText("4");
         txtMinRespondentAge.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMinRespondentAgeActionPerformed(evt);
@@ -304,14 +311,54 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
 
         lblPasswordConfirm2.setText("Minimum Respondent Age:");
 
+        lblPasswordConfirm3.setText("Maximum Antepartum Visits:");
+
+        lblPasswordConfirm4.setText("Maximum Postpartum Visits:");
+
+        txtMaxPostpartumVisits.setText("4");
+
+        txtMaxAntepartumVisits.setText("4");
+        txtMaxAntepartumVisits.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMaxAntepartumVisitsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelSettingsLayout = new javax.swing.GroupLayout(panelSettings);
         panelSettings.setLayout(panelSettingsLayout);
         panelSettingsLayout.setHorizontalGroup(
             panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator1)
             .addGroup(panelSettingsLayout.createSequentialGroup()
-                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelSettingsLayout.createSequentialGroup()
+                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblUsername)
+                            .addComponent(lblPassword)
+                            .addComponent(lblPasswordConfirm)
+                            .addComponent(lblPasswordConfirm1)
+                            .addComponent(lblPasswordConfirm2)
+                            .addComponent(lblPasswordConfirm3)
+                            .addComponent(lblPasswordConfirm4))
                         .addGap(16, 16, 16)
+                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelSettingsLayout.createSequentialGroup()
+                                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtMinHeadAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtMinRespondentAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(panelDbms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20))
+                            .addGroup(panelSettingsLayout.createSequentialGroup()
+                                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtMinFatherAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtMaxAntepartumVisits, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtMinMotherAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtMinSpouseAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtMaxPostpartumVisits, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(panelSettingsLayout.createSequentialGroup()
                         .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblHostname)
                             .addComponent(lblPort)
@@ -320,34 +367,14 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cboSystemLanguage, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cboSystemCodeGen, 0, 455, Short.MAX_VALUE)
+                            .addComponent(cboSystemCodeGen, 0, 1, Short.MAX_VALUE)
                             .addComponent(txtSystemPath)
-                            .addComponent(cboSystemCodeGenIcr, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(panelSettingsLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblUsername)
-                            .addComponent(lblPassword)
-                            .addComponent(lblPasswordConfirm)
-                            .addComponent(lblPasswordConfirm1)
-                            .addComponent(lblPasswordConfirm2))
-                        .addGap(16, 16, 16)
-                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtMinFatherAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtMinMotherAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtMinSpouseAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtMinHeadAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtMinRespondentAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
-                        .addComponent(panelDbms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jSeparator1)
+                            .addComponent(cboSystemCodeGenIcr, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(11, 12, Short.MAX_VALUE))))
         );
         panelSettingsLayout.setVerticalGroup(
             panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelSettingsLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblHostname)
                     .addComponent(txtSystemPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -363,31 +390,44 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPort2)
                     .addComponent(cboSystemCodeGenIcr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelDbms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelSettingsLayout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(panelDbms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelSettingsLayout.createSequentialGroup()
+                        .addGap(16, 16, 16)
                         .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblUsername)
                             .addComponent(txtMinFatherAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblPassword)
-                            .addComponent(txtMinMotherAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtMinSpouseAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblPasswordConfirm))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtMinHeadAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblPasswordConfirm1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtMinRespondentAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblPasswordConfirm2))))
+                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelSettingsLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblPassword)
+                                    .addComponent(txtMinMotherAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtMinSpouseAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblPasswordConfirm1)
+                                    .addComponent(txtMinHeadAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblPasswordConfirm2)
+                                    .addComponent(txtMinRespondentAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblPasswordConfirm3)
+                                    .addComponent(txtMaxAntepartumVisits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblPasswordConfirm4)
+                                    .addComponent(txtMaxPostpartumVisits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(panelSettingsLayout.createSequentialGroup()
+                                .addGap(44, 44, 44)
+                                .addComponent(lblPasswordConfirm)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -398,34 +438,38 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(panelSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtSystemPathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSystemPathActionPerformed
+    private void txtMinRespondentAgeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMinRespondentAgeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtSystemPathActionPerformed
-
-    private void cboSystemCodeGenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboSystemCodeGenActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cboSystemCodeGenActionPerformed
+    }//GEN-LAST:event_txtMinRespondentAgeActionPerformed
 
     private void cboSystemCodeGenIcrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboSystemCodeGenIcrActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cboSystemCodeGenIcrActionPerformed
 
-    private void txtMinRespondentAgeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMinRespondentAgeActionPerformed
+    private void cboSystemCodeGenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboSystemCodeGenActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtMinRespondentAgeActionPerformed
+    }//GEN-LAST:event_cboSystemCodeGenActionPerformed
+
+    private void txtSystemPathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSystemPathActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSystemPathActionPerformed
+
+    private void txtMaxAntepartumVisitsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaxAntepartumVisitsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMaxAntepartumVisitsActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -443,6 +487,8 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     private javax.swing.JLabel lblPasswordConfirm;
     private javax.swing.JLabel lblPasswordConfirm1;
     private javax.swing.JLabel lblPasswordConfirm2;
+    private javax.swing.JLabel lblPasswordConfirm3;
+    private javax.swing.JLabel lblPasswordConfirm4;
     private javax.swing.JLabel lblPort;
     private javax.swing.JLabel lblPort1;
     private javax.swing.JLabel lblPort2;
@@ -453,6 +499,8 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     private javax.swing.JPanel panelSettings;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JPasswordField txtEmailPassword;
+    private javax.swing.JTextField txtMaxAntepartumVisits;
+    private javax.swing.JTextField txtMaxPostpartumVisits;
     private javax.swing.JTextField txtMinFatherAge;
     private javax.swing.JTextField txtMinHeadAge;
     private javax.swing.JTextField txtMinMotherAge;
@@ -516,6 +564,8 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
         map.put(KEY_MIN_HEAD_AGE, txtMinHeadAge.getText());
         map.put(KEY_MIN_SPOUSE_AGE, txtMinSpouseAge.getText());
         map.put(KEY_MIN_RESPONDENT_AGE, txtMinRespondentAge.getText());
+        map.put(KEY_MAX_ANTEPARTUM_VISITS, txtMaxAntepartumVisits.getText());
+        map.put(KEY_MAX_POSTPARTUM_VISITS, txtMaxPostpartumVisits.getText());
         map.put(KEY_GENDER_CHECK, "true");
         map.put(KEY_SYS_LANG, getSystemLanguage());
         map.put(KEY_SYS_CODEGEN, getCodeGenerator());
@@ -542,6 +592,8 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
             String minmoth = mapConfigFile.get(KEY_MIN_MOTHER_AGE);
             String minspou = mapConfigFile.get(KEY_MIN_SPOUSE_AGE);
             String minresp = mapConfigFile.get(KEY_MIN_RESPONDENT_AGE);
+            String maxanvi = mapConfigFile.get(KEY_MAX_ANTEPARTUM_VISITS);
+            String maxpovi = mapConfigFile.get(KEY_MAX_POSTPARTUM_VISITS);
             String minhead = mapConfigFile.get(KEY_MIN_HEAD_AGE);
             String mailcon = mapConfigFile.get(KEY_MAIL_CONFIG);
             String emailad = mapConfigFile.get(KEY_EMAIL);
@@ -557,6 +609,8 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
             txtMinSpouseAge.setText(minspou);
             txtMinHeadAge.setText(minhead);
             txtMinRespondentAge.setText(minresp);
+            txtMaxAntepartumVisits.setText(maxanvi);
+            txtMaxPostpartumVisits.setText(maxpovi);
             chkUseGmail.setSelected(mailcon.equals("true"));
             txtEmail.setText(emailad);
             txtEmailPassword.setText(passwrd);
