@@ -41,7 +41,7 @@ tasks.named('test') {
 }
 
 jar {
-    archiveBaseName = "hds-explorer-installer-1.1.2_build_404_rc1"
+    archiveBaseName = "hds-explorer-installer-1.1.4_build_414"
     manifest {
         attributes(
           'Main-Class': 'org.philimones.hds.explorer.installer.App'
