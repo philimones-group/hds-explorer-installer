@@ -13,6 +13,14 @@ public class StringUtil {
         return (value == null || value.isEmpty());
     }
     
+    public static Integer getInteger(String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    
     public static boolean isInteger(String value) {
         try {
             Integer.parseInt(value);
@@ -31,7 +39,32 @@ public class StringUtil {
         }
     }
     
+    public static boolean isIntegerGreaterThanAndLessThan(String textValue, int minValue, int maxValue) {
+                
+        Integer result = getInteger(textValue);
+        if (result != null && result >= minValue && result <= maxValue) {
+            return true;
+        }
+        
+        return false;
+            
+    }
+    
     public static boolean equals(char[] c1, char[] c2) {
         return new String(c1).equalsIgnoreCase(new String(c2));
+    }
+
+    static int[] splitToNumbers(String antschd) {
+        String[] strs = antschd.split(",");
+        int[] numbers = new int[strs.length];
+        
+        for (int i=0; i < strs.length; i++) {
+            Integer n = getInteger(strs[i]);
+            if (n != null) {
+                numbers[i] = n;
+            }
+        }        
+        
+        return numbers;
     }
 }

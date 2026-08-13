@@ -13,6 +13,13 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 /**
  *
@@ -27,13 +34,16 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     static final String KEY_MIN_SPOUSE_AGE = "hds.explorer.constraints.spouse.age.min";
     static final String KEY_MIN_RESPONDENT_AGE = "hds.explorer.constraints.respondent.age.min";
     static final String KEY_MAX_ANTEPARTUM_VISITS = "hds.explorer.constraints.pregnancy.antepartum.visits.max";
-    static final String KEY_MAX_POSTPARTUM_VISITS = "hds.explorer.constraints.pregnancy.postpartum.visits.max";
+    static final String KEY_MAX_POSTPARTUM_VISITS = "hds.explorer.constraints.pregnancy.postpartum.visits.max";    
+    static final String KEY_ANTEPARTUM_VISITS_SCHEDULE = "hds.explorer.constraints.pregnancy.antepartum.visits.schedule";
+    static final String KEY_POSTPARTUM_VISITS_SCHEDULE = "hds.explorer.constraints.pregnancy.postpartum.visits.schedule";
     static final String KEY_GENDER_CHECK = "hds.explorer.constraints.gender.checking";
     static final String KEY_SYS_LANG = "hds.explorer.system.language";
     static final String KEY_SYS_CODEGEN = "hds.explorer.system.codegenerator"; //"org.philimone.hds.explorer.server.settings.generator.DefaultCodeGenerator"
     static final String KEY_SYS_CODEICR = "hds.explorer.system.codegenerator_rules.incremental";
     static final String KEY_SYSTEM_PATH = "hds.explorer.system.path"; //"/var/lib/hds-explorer"
     static final String KEY_SYSTEM_USE_ETHIOPIAN_CALENDAR = "hds.explorer.system.use.ethiopian.calendar";
+    static final String KEY_SYSTEM_EXPORT_HISTORY_MODE = "hds.explorer.system.export.history.mode";    
     static final String KEY_EMAIL = "grails.mail.username";
     static final String KEY_EMAIL_PASSWORD = "grails.mail.password";
     
@@ -45,6 +55,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     static List<String> codeGeneratorRulesList = Arrays.asList("FILL_GAPS", "INCREMENT_LAST_CODE");
     
     private Map<String, String> mapConfigFile;
+    private String historyExportMode;
     
     /**
      * Creates new form PanelDatabase
@@ -52,8 +63,137 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     public PanelParameters() {
         initComponents();        
         initListeners();
-        this.mapConfigFile = new LinkedHashMap<>();        
+        this.mapConfigFile = new LinkedHashMap<>();       
+        
+        setupTextChanges();
+        makeNumericFields();
     }
+    
+    private void setupTextChanges(){
+        txtMaxAntepartumVisits.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                // Triggered when text is typed or pasted
+                onAntepartumChanged();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                // Triggered when text is deleted or backspaced
+                onAntepartumChanged();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                // Rarely used for plain text fields (handles style changes)
+            }
+        });
+        
+        txtMaxPostpartumVisits.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                // Triggered when text is typed or pasted
+                onPostpartumChanged();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                // Triggered when text is deleted or backspaced
+                onPostpartumChanged();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                // Rarely used for plain text fields (handles style changes)
+            }
+        });
+    }
+    
+    private void onAntepartumChanged(){
+        Integer value = StringUtil.getInteger(txtMaxAntepartumVisits.getText());
+        if (value != null) {
+            enableAntepartumSchedules(value);
+        }
+    }
+    
+    private void onPostpartumChanged(){
+        Integer value = StringUtil.getInteger(txtMaxPostpartumVisits.getText());
+        if (value != null) {
+            enablePostpartumSchedules(value);
+        }
+    }
+        
+    private void makeNumericFields() {
+        makeNumericOnly(txtMinFatherAge);
+        makeNumericOnly(txtMinMotherAge);
+        makeNumericOnly(txtMinSpouseAge);
+        makeNumericOnly(txtMinHeadAge);
+        makeNumericOnly(txtMinRespondentAge);
+        
+        makeNumericOnly(txtMaxAntepartumVisits);
+        makeNumericOnly(txtMaxPostpartumVisits);
+        
+        makeNumericOnly(txtVisitPos1);
+        makeNumericOnly(txtVisitPos2);
+        makeNumericOnly(txtVisitPos3);
+        makeNumericOnly(txtVisitPos4);
+        makeNumericOnly(txtVisitPos5);
+        makeNumericOnly(txtVisitPos6);
+        makeNumericOnly(txtVisitPos7);
+        makeNumericOnly(txtVisitPos8);
+        
+        makeNumericOnly(txtVisitPos1);
+        makeNumericOnly(txtVisitPos2);
+        makeNumericOnly(txtVisitPos3);
+        makeNumericOnly(txtVisitPos4);
+        makeNumericOnly(txtVisitPos5);
+        makeNumericOnly(txtVisitPos6);
+        makeNumericOnly(txtVisitPos7);
+        makeNumericOnly(txtVisitPos8);
+    }
+    
+    private void enableAntepartumSchedules(int antepartumVisitsCount) {
+        txtVisitAnt1.setEnabled(antepartumVisitsCount > 0);
+        txtVisitAnt2.setEnabled(antepartumVisitsCount > 1);
+        txtVisitAnt3.setEnabled(antepartumVisitsCount > 2);
+        txtVisitAnt4.setEnabled(antepartumVisitsCount > 3);
+        txtVisitAnt5.setEnabled(antepartumVisitsCount > 4);
+        txtVisitAnt6.setEnabled(antepartumVisitsCount > 5);
+        txtVisitAnt7.setEnabled(antepartumVisitsCount > 6);
+        txtVisitAnt8.setEnabled(antepartumVisitsCount > 7);
+    }
+    
+    private void enablePostpartumSchedules(int postpartumVisitsCount) {
+        txtVisitPos1.setEnabled(postpartumVisitsCount > 0);
+        txtVisitPos2.setEnabled(postpartumVisitsCount > 1);
+        txtVisitPos3.setEnabled(postpartumVisitsCount > 2);
+        txtVisitPos4.setEnabled(postpartumVisitsCount > 3);
+        txtVisitPos5.setEnabled(postpartumVisitsCount > 4);
+        txtVisitPos6.setEnabled(postpartumVisitsCount > 5);
+        txtVisitPos7.setEnabled(postpartumVisitsCount > 6);
+        txtVisitPos8.setEnabled(postpartumVisitsCount > 7);
+    }
+    
+    public  void makeNumericOnly(JTextField field) {
+        ((AbstractDocument) field.getDocument()).setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) 
+                    throws BadLocationException {
+                if (string != null && string.matches("\\d+")) {
+                    super.insertString(fb, offset, string, attr);
+                }
+            }
+
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) 
+                    throws BadLocationException {
+                if (text != null && text.matches("\\d+")) {
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            }
+        });
+    }
+
 
     @Override
     public void setTemporaryDirectory(File temporaryDirectory) {
@@ -154,16 +294,37 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
         cboSystemCodeGenIcr = new javax.swing.JComboBox<>();
         txtMinRespondentAge = new javax.swing.JTextField();
         lblPasswordConfirm2 = new javax.swing.JLabel();
+        cboSystemCalendar = new javax.swing.JComboBox<>();
+        lblPort3 = new javax.swing.JLabel();
+        panelVisits = new javax.swing.JPanel();
+        txtVisitAnt1 = new javax.swing.JTextField();
         lblPasswordConfirm3 = new javax.swing.JLabel();
         lblPasswordConfirm4 = new javax.swing.JLabel();
         txtMaxPostpartumVisits = new javax.swing.JTextField();
         txtMaxAntepartumVisits = new javax.swing.JTextField();
-        cboSystemCalendar = new javax.swing.JComboBox<>();
-        lblPort3 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txtVisitAnt2 = new javax.swing.JTextField();
+        txtVisitAnt3 = new javax.swing.JTextField();
+        txtVisitAnt4 = new javax.swing.JTextField();
+        txtVisitAnt5 = new javax.swing.JTextField();
+        txtVisitAnt6 = new javax.swing.JTextField();
+        txtVisitAnt7 = new javax.swing.JTextField();
+        txtVisitAnt8 = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        txtVisitPos1 = new javax.swing.JTextField();
+        txtVisitPos2 = new javax.swing.JTextField();
+        txtVisitPos3 = new javax.swing.JTextField();
+        txtVisitPos4 = new javax.swing.JTextField();
+        txtVisitPos5 = new javax.swing.JTextField();
+        txtVisitPos6 = new javax.swing.JTextField();
+        txtVisitPos7 = new javax.swing.JTextField();
+        txtVisitPos8 = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
 
-        setMaximumSize(new java.awt.Dimension(701, 500));
-        setMinimumSize(new java.awt.Dimension(701, 500));
-        setPreferredSize(new java.awt.Dimension(701, 500));
+        setMaximumSize(new java.awt.Dimension(701, 532));
+        setMinimumSize(new java.awt.Dimension(701, 532));
+        setPreferredSize(new java.awt.Dimension(701, 532));
         setRequestFocusEnabled(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -192,7 +353,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTitleInfo1))
-                .addContainerGap(211, Short.MAX_VALUE))
+                .addContainerGap(230, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -253,7 +414,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelDbmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                    .addComponent(txtEmail)
                     .addComponent(txtEmailPassword))
                 .addContainerGap())
             .addGroup(panelDbmsLayout.createSequentialGroup()
@@ -274,7 +435,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                 .addGroup(panelDbmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtEmailPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         cboSystemLanguage.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "English", "French", "Portuguese", "Amharic (Ethiopian)" }));
@@ -325,19 +486,6 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
 
         lblPasswordConfirm2.setText("Minimum Respondent Age:");
 
-        lblPasswordConfirm3.setText("Maximum Antepartum Visits:");
-
-        lblPasswordConfirm4.setText("Maximum Postpartum Visits:");
-
-        txtMaxPostpartumVisits.setText("4");
-
-        txtMaxAntepartumVisits.setText("4");
-        txtMaxAntepartumVisits.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtMaxAntepartumVisitsActionPerformed(evt);
-            }
-        });
-
         cboSystemCalendar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Gregorian Calendar (Default)", "Ethiopian Calendar" }));
         cboSystemCalendar.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -353,13 +501,179 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
         lblPort3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPort3.setText("System Calendar:");
 
+        panelVisits.setBorder(javax.swing.BorderFactory.createTitledBorder("Pregnancy Surveillance Visits"));
+
+        txtVisitAnt1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtVisitAnt1.setText("12");
+
+        lblPasswordConfirm3.setText("Maximum Antepartum Visits:");
+
+        lblPasswordConfirm4.setText("Maximum Postpartum Visits:");
+
+        txtMaxPostpartumVisits.setText("4");
+
+        txtMaxAntepartumVisits.setText("8");
+        txtMaxAntepartumVisits.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMaxAntepartumVisitsActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Ante. Schedule");
+
+        txtVisitAnt2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtVisitAnt2.setText("20");
+
+        txtVisitAnt3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtVisitAnt3.setText("26");
+
+        txtVisitAnt4.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtVisitAnt4.setText("30");
+
+        txtVisitAnt5.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtVisitAnt5.setText("34");
+
+        txtVisitAnt6.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtVisitAnt6.setText("36");
+
+        txtVisitAnt7.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtVisitAnt7.setText("38");
+
+        txtVisitAnt8.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtVisitAnt8.setText("40");
+
+        jLabel4.setText("Weeks");
+
+        jLabel5.setText("Post. Schedule");
+
+        txtVisitPos1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtVisitPos1.setText("3");
+
+        txtVisitPos2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtVisitPos2.setText("7");
+
+        txtVisitPos3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtVisitPos3.setText("21");
+
+        txtVisitPos4.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtVisitPos4.setText("42");
+
+        txtVisitPos5.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtVisitPos5.setEnabled(false);
+
+        txtVisitPos6.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtVisitPos6.setEnabled(false);
+
+        txtVisitPos7.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtVisitPos7.setEnabled(false);
+
+        txtVisitPos8.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtVisitPos8.setEnabled(false);
+
+        jLabel6.setText("Days");
+
+        javax.swing.GroupLayout panelVisitsLayout = new javax.swing.GroupLayout(panelVisits);
+        panelVisits.setLayout(panelVisitsLayout);
+        panelVisitsLayout.setHorizontalGroup(
+            panelVisitsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelVisitsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelVisitsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelVisitsLayout.createSequentialGroup()
+                        .addComponent(lblPasswordConfirm3)
+                        .addGap(16, 16, 16)
+                        .addComponent(txtMaxAntepartumVisits, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3))
+                    .addGroup(panelVisitsLayout.createSequentialGroup()
+                        .addComponent(lblPasswordConfirm4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtMaxPostpartumVisits, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5)))
+                .addGap(3, 3, 3)
+                .addGroup(panelVisitsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelVisitsLayout.createSequentialGroup()
+                        .addComponent(txtVisitAnt1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtVisitAnt2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtVisitAnt3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtVisitAnt4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtVisitAnt5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtVisitAnt6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtVisitAnt7, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtVisitAnt8, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4))
+                    .addGroup(panelVisitsLayout.createSequentialGroup()
+                        .addComponent(txtVisitPos1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtVisitPos2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtVisitPos3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtVisitPos4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtVisitPos5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtVisitPos6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtVisitPos7, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtVisitPos8, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel6)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelVisitsLayout.setVerticalGroup(
+            panelVisitsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelVisitsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelVisitsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblPasswordConfirm3)
+                    .addComponent(txtMaxAntepartumVisits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtVisitAnt1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtVisitAnt2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtVisitAnt3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtVisitAnt4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtVisitAnt5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtVisitAnt6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtVisitAnt7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtVisitAnt8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(18, 18, 18)
+                .addGroup(panelVisitsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelVisitsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblPasswordConfirm4)
+                        .addComponent(txtMaxPostpartumVisits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelVisitsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(txtVisitPos1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtVisitPos2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtVisitPos3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtVisitPos4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtVisitPos5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtVisitPos6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtVisitPos7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtVisitPos8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel6)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout panelSettingsLayout = new javax.swing.GroupLayout(panelSettings);
         panelSettings.setLayout(panelSettingsLayout);
         panelSettingsLayout.setHorizontalGroup(
             panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1)
             .addGroup(panelSettingsLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelSettingsLayout.createSequentialGroup()
                         .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -367,26 +681,17 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                             .addComponent(lblPassword)
                             .addComponent(lblPasswordConfirm)
                             .addComponent(lblPasswordConfirm1)
-                            .addComponent(lblPasswordConfirm2)
-                            .addComponent(lblPasswordConfirm3)
-                            .addComponent(lblPasswordConfirm4))
+                            .addComponent(lblPasswordConfirm2))
                         .addGap(16, 16, 16)
                         .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelSettingsLayout.createSequentialGroup()
-                                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtMinHeadAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtMinRespondentAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(panelDbms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(20, 20, 20))
-                            .addGroup(panelSettingsLayout.createSequentialGroup()
-                                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtMinFatherAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtMaxAntepartumVisits, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtMinMotherAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtMinSpouseAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtMaxPostpartumVisits, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(416, Short.MAX_VALUE))))
+                            .addComponent(txtMinHeadAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtMinRespondentAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtMinFatherAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtMinMotherAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtMinSpouseAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27)
+                        .addComponent(panelDbms, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(panelSettingsLayout.createSequentialGroup()
                         .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblHostname)
@@ -406,7 +711,10 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                                 .addComponent(lblPort3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cboSystemCalendar, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(11, 12, Short.MAX_VALUE))))
+                        .addGap(11, 12, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSettingsLayout.createSequentialGroup()
+                        .addComponent(panelVisits, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         panelSettingsLayout.setVerticalGroup(
             panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -430,15 +738,12 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                     .addComponent(lblPort2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16)
-                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblUsername)
-                    .addComponent(txtMinFatherAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelSettingsLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelSettingsLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(lblPassword)
                                     .addComponent(txtMinMotherAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -451,23 +756,23 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(lblPasswordConfirm2)
-                                    .addComponent(txtMinRespondentAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(lblPasswordConfirm3)
-                                    .addComponent(txtMaxAntepartumVisits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSettingsLayout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(panelDbms, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblPasswordConfirm4)
-                            .addComponent(txtMaxPostpartumVisits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(txtMinRespondentAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(panelDbms, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)))
                     .addGroup(panelSettingsLayout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblUsername)
+                            .addComponent(txtMinFatherAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(44, 44, 44)
-                        .addComponent(lblPasswordConfirm)))
+                        .addComponent(lblPasswordConfirm)
+                        .addGap(60, 60, 60)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(panelVisits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        panelVisits.getAccessibleContext().setAccessibleName("Visits Schedules");
+        panelVisits.getAccessibleContext().setAccessibleParent(panelVisits);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -484,8 +789,8 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(panelSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(panelSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(176, 176, 176))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -537,6 +842,10 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     private javax.swing.JCheckBox chkUseGmail;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblHostname;
@@ -556,6 +865,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     private javax.swing.JLabel lblUsername;
     private javax.swing.JPanel panelDbms;
     private javax.swing.JPanel panelSettings;
+    private javax.swing.JPanel panelVisits;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JPasswordField txtEmailPassword;
     private javax.swing.JTextField txtMaxAntepartumVisits;
@@ -566,6 +876,22 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     private javax.swing.JTextField txtMinRespondentAge;
     private javax.swing.JTextField txtMinSpouseAge;
     private javax.swing.JTextField txtSystemPath;
+    private javax.swing.JTextField txtVisitAnt1;
+    private javax.swing.JTextField txtVisitAnt2;
+    private javax.swing.JTextField txtVisitAnt3;
+    private javax.swing.JTextField txtVisitAnt4;
+    private javax.swing.JTextField txtVisitAnt5;
+    private javax.swing.JTextField txtVisitAnt6;
+    private javax.swing.JTextField txtVisitAnt7;
+    private javax.swing.JTextField txtVisitAnt8;
+    private javax.swing.JTextField txtVisitPos1;
+    private javax.swing.JTextField txtVisitPos2;
+    private javax.swing.JTextField txtVisitPos3;
+    private javax.swing.JTextField txtVisitPos4;
+    private javax.swing.JTextField txtVisitPos5;
+    private javax.swing.JTextField txtVisitPos6;
+    private javax.swing.JTextField txtVisitPos7;
+    private javax.swing.JTextField txtVisitPos8;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -614,20 +940,98 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
             type = ValidationType.ERROR;
             component = txtEmailPassword;
             
-        } else if (!StringUtil.isIntegerGreaterThan(txtMaxAntepartumVisits.getText(), 0)) {
-            errorMessage = "The Maximum Number of Pregnancy Antepartum Visits must be an integer value greater than zero";
+        } else if (!StringUtil.isIntegerGreaterThanAndLessThan(txtMaxAntepartumVisits.getText(), 1, 8)) {
+            errorMessage = "The Maximum Number of Pregnancy Antepartum Visits must be an integer value greater than zero and less or equal to 8";
             type = ValidationType.ERROR;
             component = txtMaxPostpartumVisits;
             
-        } else if (!StringUtil.isIntegerGreaterThan(txtMaxPostpartumVisits.getText(), 0)) {
-            errorMessage = "The Maximum Number of Pregnancy Postpartum Visits must be an integer value greater than zero";
+        } else if (!StringUtil.isIntegerGreaterThanAndLessThan(txtMaxPostpartumVisits.getText(), 1, 8)) {
+            errorMessage = "The Maximum Number of Pregnancy Postpartum Visits must be an integer value greater than zero and less or equal to 8";
             type = ValidationType.ERROR;
-            component = txtMaxPostpartumVisits;
-            
-        }        
+            component = txtMaxPostpartumVisits;            
+        } else if (!isScheduleValid(txtVisitAnt1, null)) {
+            errorMessage = "The number of weeks of the (1st antepartum visit) must be greater than zero and greater than the previous visit week number";
+            type = ValidationType.ERROR;
+            component = txtVisitAnt1;
+        } else if (!isScheduleValid(txtVisitAnt2, txtVisitAnt1)) {
+            errorMessage = "The number of weeks of the (2nd antepartum visit) must be greater than zero and greater than the previous visit week number";
+            type = ValidationType.ERROR;
+            component = txtVisitAnt2;
+        } else if (!isScheduleValid(txtVisitAnt3, txtVisitAnt2)) {
+            errorMessage = "The number of weeks of the (3rd antepartum visit) must be greater than zero and greater than the previous visit week number";
+            type = ValidationType.ERROR;
+            component = txtVisitAnt3;
+        } else if (!isScheduleValid(txtVisitAnt4, txtVisitAnt3)) {
+            errorMessage = "The number of weeks of the (4th antepartum visit) must be greater than zero and greater than the previous visit week number";
+            type = ValidationType.ERROR;
+            component = txtVisitAnt4;
+        } else if (!isScheduleValid(txtVisitAnt5, txtVisitAnt4)) {
+            errorMessage = "The number of weeks of the (5th antepartum visit) must be greater than zero and greater than the previous visit week number";
+            type = ValidationType.ERROR;
+            component = txtVisitAnt5;
+        } else if (!isScheduleValid(txtVisitAnt6, txtVisitAnt5)) {
+            errorMessage = "The number of weeks of the (6th antepartum visit) must be greater than zero and greater than the previous visit week number";
+            type = ValidationType.ERROR;
+            component = txtVisitAnt6;
+        } else if (!isScheduleValid(txtVisitAnt7, txtVisitAnt6)) {
+            errorMessage = "The number of weeks of the (7th antepartum visit) must be greater than zero and greater than the previous visit week number";
+            type = ValidationType.ERROR;
+            component = txtVisitAnt7;
+        } else if (!isScheduleValid(txtVisitAnt8, txtVisitAnt7)) {
+            errorMessage = "The number of weeks of the (8th antepartum visit) must be greater than zero and greater than the previous visit week number";
+            type = ValidationType.ERROR;
+            component = txtVisitAnt8;
+        } else if (!isScheduleValid(txtVisitPos1, null)) {
+            errorMessage = "The number of days of the (1st pospartum visit) must be greater than zero and greater than the previous visit day number";
+            type = ValidationType.ERROR;
+            component = txtVisitPos1;
+        } else if (!isScheduleValid(txtVisitPos2, txtVisitPos1)) {
+            errorMessage = "The number of days of the (2nd pospartum visit) must be greater than zero and greater than the previous visit day number";
+            type = ValidationType.ERROR;
+            component = txtVisitPos2;
+        } else if (!isScheduleValid(txtVisitPos3, txtVisitPos2)) {
+            errorMessage = "The number of days of the (3rd pospartum visit) must be greater than zero and greater than the previous visit day number";
+            type = ValidationType.ERROR;
+            component = txtVisitPos3;
+        } else if (!isScheduleValid(txtVisitPos4, txtVisitPos3)) {
+            errorMessage = "The number of days of the (4th pospartum visit) must be greater than zero and greater than the previous visit day number";
+            type = ValidationType.ERROR;
+            component = txtVisitPos4;
+        } else if (!isScheduleValid(txtVisitPos5, txtVisitPos4)) {
+            errorMessage = "The number of days of the (5th pospartum visit) must be greater than zero and greater than the previous visit day number";
+            type = ValidationType.ERROR;
+            component = txtVisitPos5;
+        } else if (!isScheduleValid(txtVisitPos6, txtVisitPos5)) {
+            errorMessage = "The number of days of the (6th pospartum visit) must be greater than zero and greater than the previous visit day number";
+            type = ValidationType.ERROR;
+            component = txtVisitPos6;
+        } else if (!isScheduleValid(txtVisitPos7, txtVisitPos6)) {
+            errorMessage = "The number of days of the (7th pospartum visit) must be greater than zero and greater than the previous visit day number";
+            type = ValidationType.ERROR;
+            component = txtVisitPos7;
+        } else if (!isScheduleValid(txtVisitPos8, txtVisitPos7)) {
+            errorMessage = "The number of days of the (8th pospartum visit) must be greater than zero and greater than the previous visit day number";
+            type = ValidationType.ERROR;
+            component = txtVisitPos8;
+        }
         
         return new ValidationResult(type, errorMessage, component);
     }    
+    
+    private boolean isScheduleValid(JTextField currentField, JTextField previousField){
+        if (!currentField.isEnabled()) return true;
+        
+        Integer currentValue = StringUtil.getInteger(currentField.getText());
+        Integer previousValue = previousField == null ? null : StringUtil.getInteger(previousField.getText());
+        
+        if (previousValue == null && currentValue > 0) {
+            return true;
+        } else if (currentValue > 0 && currentValue > previousValue) {
+            return true;
+        } else {
+            return false;            
+        }
+    }
 
     @Override
     public Map<String, String> exportValues() {
@@ -640,12 +1044,15 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
         map.put(KEY_MIN_RESPONDENT_AGE, txtMinRespondentAge.getText());
         map.put(KEY_MAX_ANTEPARTUM_VISITS, txtMaxAntepartumVisits.getText());
         map.put(KEY_MAX_POSTPARTUM_VISITS, txtMaxPostpartumVisits.getText());
+        map.put(KEY_ANTEPARTUM_VISITS_SCHEDULE, getAntepartumSchedule());
+        map.put(KEY_POSTPARTUM_VISITS_SCHEDULE, getPospartumSchedule());
         map.put(KEY_GENDER_CHECK, "true");
         map.put(KEY_SYS_LANG, getSystemLanguage());
         map.put(KEY_SYS_CODEGEN, getCodeGenerator());
         map.put(KEY_SYS_CODEICR, getCodeGeneratorIncrementalRule());
         map.put(KEY_SYSTEM_PATH, txtSystemPath.getText());
         map.put(KEY_SYSTEM_USE_ETHIOPIAN_CALENDAR, isEthiopianSelected()+""); //chkUseEthiopianCalendar.isSelected()+"");
+        map.put(KEY_SYSTEM_EXPORT_HISTORY_MODE, historyExportMode==null ? "FULL" : historyExportMode);
         map.put(KEY_EMAIL, txtEmail.getText());
         map.put(KEY_EMAIL_PASSWORD, new String(txtEmailPassword.getPassword()));
         
@@ -669,15 +1076,19 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
             String minresp = mapConfigFile.get(KEY_MIN_RESPONDENT_AGE);
             String maxanvi = mapConfigFile.get(KEY_MAX_ANTEPARTUM_VISITS);
             String maxpovi = mapConfigFile.get(KEY_MAX_POSTPARTUM_VISITS);
+            String antschd = mapConfigFile.get(KEY_ANTEPARTUM_VISITS_SCHEDULE);
+            String posschd = mapConfigFile.get(KEY_POSTPARTUM_VISITS_SCHEDULE);
             String minhead = mapConfigFile.get(KEY_MIN_HEAD_AGE);
             String mailcon = mapConfigFile.get(KEY_MAIL_CONFIG);
             String emailad = mapConfigFile.get(KEY_EMAIL);
             String passwrd = mapConfigFile.get(KEY_EMAIL_PASSWORD);
             String ethipca = mapConfigFile.get(KEY_SYSTEM_USE_ETHIOPIAN_CALENDAR);
+            String hisexmd = mapConfigFile.get(KEY_SYSTEM_EXPORT_HISTORY_MODE);
 
             if (StringUtil.isBlank(maxanvi)) maxanvi = "4";
             if (StringUtil.isBlank(maxpovi)) maxpovi = "4";
             if (StringUtil.isBlank(minresp)) minresp = "12";
+            if (StringUtil.isBlank(hisexmd)) hisexmd = "FULL";
 
             txtSystemPath.setText(respath);
             cboSystemLanguage.setSelectedIndex(getSystemLanguageIndex(syslang));
@@ -692,9 +1103,12 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
             txtMinRespondentAge.setText(minresp);
             txtMaxAntepartumVisits.setText(maxanvi);
             txtMaxPostpartumVisits.setText(maxpovi);
+            setAntepartumSchedule(antschd);
+            setPospartumSchedule(posschd);
             chkUseGmail.setSelected(mailcon.equals("true"));
             txtEmail.setText(emailad);
             txtEmailPassword.setText(passwrd);
+            historyExportMode = hisexmd;
         }
         
     }
@@ -726,4 +1140,60 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     private boolean isEthiopianSelected() {
         return cboSystemCalendar.getSelectedIndex()==1;
     }
+
+    private String getAntepartumSchedule() {
+        StringBuilder sb = new StringBuilder();
+        
+        if (txtVisitAnt1.isEnabled()) sb.append(txtVisitAnt1.getText());
+        if (txtVisitAnt2.isEnabled()) sb.append("," + txtVisitAnt2.getText());
+        if (txtVisitAnt3.isEnabled()) sb.append("," + txtVisitAnt3.getText());
+        if (txtVisitAnt4.isEnabled()) sb.append("," + txtVisitAnt4.getText());
+        if (txtVisitAnt5.isEnabled()) sb.append("," + txtVisitAnt5.getText());
+        if (txtVisitAnt6.isEnabled()) sb.append("," + txtVisitAnt6.getText());
+        if (txtVisitAnt7.isEnabled()) sb.append("," + txtVisitAnt7.getText());
+        if (txtVisitAnt8.isEnabled()) sb.append("," + txtVisitAnt8.getText());
+        
+        return sb.toString();
+    }
+
+    private String getPospartumSchedule() {
+        StringBuilder sb = new StringBuilder();
+        
+        if (txtVisitPos1.isEnabled()) sb.append(txtVisitPos1.getText());
+        if (txtVisitPos2.isEnabled()) sb.append("," + txtVisitPos2.getText());
+        if (txtVisitPos3.isEnabled()) sb.append("," + txtVisitPos3.getText());
+        if (txtVisitPos4.isEnabled()) sb.append("," + txtVisitPos4.getText());
+        if (txtVisitPos5.isEnabled()) sb.append("," + txtVisitPos5.getText());
+        if (txtVisitPos6.isEnabled()) sb.append("," + txtVisitPos6.getText());
+        if (txtVisitPos7.isEnabled()) sb.append("," + txtVisitPos7.getText());
+        if (txtVisitPos8.isEnabled()) sb.append("," + txtVisitPos8.getText());
+        
+        return sb.toString();
+    }
+
+    private void setAntepartumSchedule(String antschd) {
+        int[] values = StringUtil.splitToNumbers(antschd);
+        if (values.length > 0) txtVisitAnt1.setText(values[0]+"");
+        if (values.length > 1) txtVisitAnt2.setText(values[1]+"");
+        if (values.length > 2) txtVisitAnt3.setText(values[2]+"");
+        if (values.length > 3) txtVisitAnt4.setText(values[3]+"");
+        if (values.length > 4) txtVisitAnt5.setText(values[4]+"");
+        if (values.length > 5) txtVisitAnt6.setText(values[5]+"");
+        if (values.length > 6) txtVisitAnt7.setText(values[6]+"");
+        if (values.length > 7) txtVisitAnt8.setText(values[7]+"");
+    }
+
+    private void setPospartumSchedule(String posschd) {
+        int[] values = StringUtil.splitToNumbers(posschd);
+        if (values.length > 0) txtVisitPos1.setText(values[0]+"");
+        if (values.length > 1) txtVisitPos2.setText(values[1]+"");
+        if (values.length > 2) txtVisitPos3.setText(values[2]+"");
+        if (values.length > 3) txtVisitPos4.setText(values[3]+"");
+        if (values.length > 4) txtVisitPos5.setText(values[4]+"");
+        if (values.length > 5) txtVisitPos6.setText(values[5]+"");
+        if (values.length > 6) txtVisitPos7.setText(values[6]+"");
+        if (values.length > 7) txtVisitPos8.setText(values[7]+"");
+    }
+
+    
 }

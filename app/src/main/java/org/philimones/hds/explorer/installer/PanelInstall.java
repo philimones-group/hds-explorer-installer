@@ -105,9 +105,9 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
         pbarConfiguring = new javax.swing.JProgressBar();
         lblConfiguring = new javax.swing.JLabel();
 
-        setMinimumSize(new java.awt.Dimension(701, 500));
+        setMinimumSize(new java.awt.Dimension(701, 532));
         setOpaque(false);
-        setPreferredSize(new java.awt.Dimension(701, 500));
+        setPreferredSize(new java.awt.Dimension(701, 532));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -199,7 +199,7 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
                 .addComponent(lblConfiguring)
                 .addGap(1, 1, 1)
                 .addComponent(pbarConfiguring, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(276, Short.MAX_VALUE))
+                .addContainerGap(314, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

@@ -136,9 +136,9 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
         txtConfigFile = new javax.swing.JTextField();
         btLoadConfigFile = new javax.swing.JButton();
 
-        setMaximumSize(new java.awt.Dimension(701, 500));
-        setMinimumSize(new java.awt.Dimension(701, 500));
-        setPreferredSize(new java.awt.Dimension(701, 500));
+        setMaximumSize(new java.awt.Dimension(701, 532));
+        setMinimumSize(new java.awt.Dimension(701, 532));
+        setPreferredSize(new java.awt.Dimension(701, 532));
         setRequestFocusEnabled(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -306,7 +306,7 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPasswordConfirm)
                     .addComponent(txtPasswordConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(121, Short.MAX_VALUE))
+                .addContainerGap(169, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
