@@ -364,6 +364,8 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
         String username = appConfigMap.get(KEY_DATASOURCE_USERNAME);
         String password = appConfigMap.get(KEY_DATASOURCE_PASSWORD);
         String dbdriver = appConfigMap.get(KEY_DATASOURCE_DRIVER);
+        String exportUsername = appConfigMap.getOrDefault("dataSource_export.username", "hds_export");
+        String exportPassword = appConfigMap.getOrDefault("dataSource_export.password", "hds_export_pass");
         
         if (dbdriver.equals(MYSQL_DRIVER_VALUE)) {
             
@@ -372,6 +374,8 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
             content = content.replace("$HOSTNAME", hostname);
             content = content.replace("$USERNAME", username);
             content = content.replace("$PASSWORD", password);
+            content = content.replace("$EXPORT_USERNAME", exportUsername);
+            content = content.replace("$EXPORT_PASSWORD", exportPassword);
                         
             File newFile = createNewFile(tempDir, "create-user-mysql.sql");
             writeToFile(newFile, content);
@@ -385,6 +389,8 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
             content = content.replace("$HOSTNAME", hostname);
             content = content.replace("$USERNAME", username);
             content = content.replace("$PASSWORD", password);
+            content = content.replace("$EXPORT_USERNAME", exportUsername);
+            content = content.replace("$EXPORT_PASSWORD", exportPassword);
             
             File newFile = createNewFile(tempDir, "create-user-postgres.sql");
             writeToFile(newFile, content);

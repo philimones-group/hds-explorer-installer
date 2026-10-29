@@ -30,7 +30,8 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
     static final String DIALECT_MYSQL = "org.hibernate.dialect.MySQL8Dialect";
     static final String URL_POSTGRES = "jdbc:postgresql://$HOSTNAME:$PORT/$DATABASE";
     static final String URL_MYSQL = "jdbc:mysql://$HOSTNAME:$PORT/$DATABASE?createDatabaseIfNotExist=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true";
-    
+    static final String URL_MYSQL_EXPORT = "jdbc:mysql://$HOSTNAME:$PORT/$DATABASE?createDatabaseIfNotExist=true&autoReconnect=true&readOnly=true&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true";
+        
     static final String KEY_DATASOURCE_POOLED = "dataSource.pooled";
     static final String KEY_DATASOURCE_DRIVER = "dataSource.driverClassName";
     static final String KEY_DATASOURCE_DIALECT = "dataSource.dialect";
@@ -39,6 +40,13 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
     static final String KEY_DATASOURCE_URL = "dataSource.url";
     static final String KEY_DATASOURCE_HOSTNAME = "dataSource.hostname";
     static final String KEY_DATASOURCE_DATABASE = "dataSource.database";
+    
+    static final String KEY_EXPORT_DATASOURCE_POOLED   = "dataSource_export.pooled";
+    static final String KEY_EXPORT_DATASOURCE_DRIVER   = "dataSource_export.driverClassName";
+    static final String KEY_EXPORT_DATASOURCE_DIALECT  = "dataSource_export.dialect";
+    static final String KEY_EXPORT_DATASOURCE_USERNAME = "dataSource_export.username";
+    static final String KEY_EXPORT_DATASOURCE_PASSWORD = "dataSource_export.password";
+    static final String KEY_EXPORT_DATASOURCE_URL      = "dataSource_export.url";
     
     static final String KEY_SYSTEM_PATH = "hds.explorer.system.path";
     
@@ -99,6 +107,32 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
         
         return url;
     }
+
+    private String getExportUrl() {
+        if (chkMySqlDb.isSelected()) {
+            return createMySqlExportUrl(txtHostname.getText(), txtDatabase.getText(), txtPort.getText());
+        } else {
+            return createPostgresExportUrl(txtHostname.getText(), txtDatabase.getText(), txtPort.getText());
+        }
+    }
+
+    private String createMySqlExportUrl(String hostname, String database, String port) {
+        String url = URL_MYSQL_EXPORT;
+        
+        url = url.replace("$HOSTNAME", hostname);
+        url = url.replace("$DATABASE", database);
+        url = url.replace("$PORT", port);
+        
+        return url;
+    }
+    
+    private String createPostgresExportUrl(String hostname, String database, String port) {
+        String url = "jdbc:postgresql://$HOSTNAME:$PORT/$DATABASE?readOnly=true";
+        url = url.replace("$HOSTNAME", hostname);
+        url = url.replace("$DATABASE", database);
+        url = url.replace("$PORT", port);
+        return url;
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -110,7 +144,7 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
     private void initComponents() {
 
         checkboxesGroup = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
+        panelTop = new javax.swing.JPanel();
         lblIcon = new javax.swing.JLabel();
         lblTitle = new javax.swing.JLabel();
         lblTitleInfo1 = new javax.swing.JLabel();
@@ -122,27 +156,35 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
         lblHostname = new javax.swing.JLabel();
         lblPort = new javax.swing.JLabel();
         lblDatabase = new javax.swing.JLabel();
-        lblPassword = new javax.swing.JLabel();
-        lblPasswordConfirm = new javax.swing.JLabel();
         txtHostname = new javax.swing.JTextField();
         txtPort = new javax.swing.JTextField();
         txtDatabase = new javax.swing.JTextField();
-        txtPassword = new javax.swing.JPasswordField();
-        txtPasswordConfirm = new javax.swing.JPasswordField();
-        lblUsername1 = new javax.swing.JLabel();
-        txtUsername = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
+        panelConfig = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtConfigFile = new javax.swing.JTextField();
         btLoadConfigFile = new javax.swing.JButton();
+        panelUser = new javax.swing.JPanel();
+        lblUsername1 = new javax.swing.JLabel();
+        txtUsername = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JPasswordField();
+        lblPassword = new javax.swing.JLabel();
+        lblPasswordConfirm = new javax.swing.JLabel();
+        txtPasswordConfirm = new javax.swing.JPasswordField();
+        panelExportUser = new javax.swing.JPanel();
+        lblExportUsername = new javax.swing.JLabel();
+        txtExportUsername = new javax.swing.JTextField();
+        lblExportPassword = new javax.swing.JLabel();
+        txtExportPassword = new javax.swing.JPasswordField();
+        lblExportPasswordConfirm = new javax.swing.JLabel();
+        txtExportPasswordConfirm = new javax.swing.JPasswordField();
 
         setMaximumSize(new java.awt.Dimension(701, 532));
         setMinimumSize(new java.awt.Dimension(701, 532));
         setPreferredSize(new java.awt.Dimension(701, 532));
         setRequestFocusEnabled(false);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        panelTop.setBackground(new java.awt.Color(255, 255, 255));
+        panelTop.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         lblIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/hds-icon-1.png"))); // NOI18N
 
@@ -158,26 +200,26 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
 
         lblTitleInfo2.setText("Specify the host, port and user credentials to access the database server");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelTopLayout = new javax.swing.GroupLayout(panelTop);
+        panelTop.setLayout(panelTopLayout);
+        panelTopLayout.setHorizontalGroup(
+            panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTopLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblIcon)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTitleInfo2)
                     .addComponent(lblTitleInfo1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        panelTopLayout.setVerticalGroup(
+            panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTopLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(panelTopLayout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
@@ -213,7 +255,7 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
                 .addGroup(panelDbmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(chkPostgresDb)
                     .addComponent(chkMySqlDb))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelDbmsLayout.setVerticalGroup(
             panelDbmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -233,10 +275,6 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
 
         lblDatabase.setText("Database name:");
 
-        lblPassword.setText("Database password:");
-
-        lblPasswordConfirm.setText("Retype database password:");
-
         txtHostname.setText("localhost");
         txtHostname.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -248,36 +286,22 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
 
         txtDatabase.setText("hds_explorer_db");
 
-        lblUsername1.setText("Database username:");
-
-        txtUsername.setText("hds_explorer");
-
         javax.swing.GroupLayout panelSettingsLayout = new javax.swing.GroupLayout(panelSettings);
         panelSettings.setLayout(panelSettingsLayout);
         panelSettingsLayout.setHorizontalGroup(
             panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelSettingsLayout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(panelSettingsLayout.createSequentialGroup()
-                        .addComponent(lblPasswordConfirm)
-                        .addGap(15, 15, 15)
-                        .addComponent(txtPasswordConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSettingsLayout.createSequentialGroup()
-                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblHostname)
-                            .addComponent(lblPort)
-                            .addComponent(lblDatabase)
-                            .addComponent(lblPassword)
-                            .addComponent(lblUsername1))
-                        .addGap(16, 16, 16)
-                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDatabase, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtHostname, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblHostname)
+                    .addComponent(lblPort)
+                    .addComponent(lblDatabase))
+                .addGap(16, 16, 16)
+                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtDatabase, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtHostname, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(125, Short.MAX_VALUE))
         );
         panelSettingsLayout.setVerticalGroup(
             panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -286,30 +310,18 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblHostname)
                     .addComponent(txtHostname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(14, 14, 14)
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPort)
                     .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(14, 14, 14)
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDatabase)
                     .addComponent(txtDatabase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblUsername1)
-                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPassword)
-                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPasswordConfirm)
-                    .addComponent(txtPasswordConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(169, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        panelConfig.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         jLabel1.setText("Config File");
 
@@ -323,55 +335,155 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
             }
         });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelConfigLayout = new javax.swing.GroupLayout(panelConfig);
+        panelConfig.setLayout(panelConfigLayout);
+        panelConfigLayout.setHorizontalGroup(
+            panelConfigLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelConfigLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtConfigFile, javax.swing.GroupLayout.PREFERRED_SIZE, 466, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btLoadConfigFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(btLoadConfigFile, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        panelConfigLayout.setVerticalGroup(
+            panelConfigLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelConfigLayout.createSequentialGroup()
+                .addGroup(panelConfigLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtConfigFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btLoadConfigFile))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
+        panelUser.setBorder(javax.swing.BorderFactory.createTitledBorder("Main User"));
+
+        lblUsername1.setText("Database username:");
+
+        txtUsername.setText("hds_explorer");
+
+        lblPassword.setText("Database password:");
+
+        lblPasswordConfirm.setText("Retype database password:");
+
+        javax.swing.GroupLayout panelUserLayout = new javax.swing.GroupLayout(panelUser);
+        panelUser.setLayout(panelUserLayout);
+        panelUserLayout.setHorizontalGroup(
+            panelUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelUserLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(panelUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(panelUserLayout.createSequentialGroup()
+                        .addComponent(lblPassword)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelUserLayout.createSequentialGroup()
+                        .addComponent(lblPasswordConfirm)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtPasswordConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelUserLayout.createSequentialGroup()
+                        .addComponent(lblUsername1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelUserLayout.setVerticalGroup(
+            panelUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelUserLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblUsername1)
+                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
+                .addGroup(panelUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblPassword)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
+                .addGroup(panelUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPasswordConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPasswordConfirm))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        panelExportUser.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Export/AI User"));
+
+        lblExportUsername.setText("Export username (read-only):");
+
+        txtExportUsername.setText("hds_export");
+
+        lblExportPassword.setText("Export user password:");
+
+        lblExportPasswordConfirm.setText("Retype export password:");
+
+        javax.swing.GroupLayout panelExportUserLayout = new javax.swing.GroupLayout(panelExportUser);
+        panelExportUser.setLayout(panelExportUserLayout);
+        panelExportUserLayout.setHorizontalGroup(
+            panelExportUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelExportUserLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(panelExportUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblExportUsername)
+                    .addComponent(lblExportPassword)
+                    .addComponent(lblExportPasswordConfirm))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelExportUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtExportUsername, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
+                    .addComponent(txtExportPassword)
+                    .addComponent(txtExportPasswordConfirm))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelExportUserLayout.setVerticalGroup(
+            panelExportUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelExportUserLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelExportUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblExportUsername)
+                    .addComponent(txtExportUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
+                .addGroup(panelExportUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblExportPassword)
+                    .addComponent(txtExportPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
+                .addGroup(panelExportUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblExportPasswordConfirm)
+                    .addComponent(txtExportPasswordConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(19, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(panelConfig, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(panelDbms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(panelDbms, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(panelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(panelUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(panelExportUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelConfig, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelDbms, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(panelSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panelUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panelExportUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -402,9 +514,10 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
     private javax.swing.JRadioButton chkMySqlDb;
     private javax.swing.JRadioButton chkPostgresDb;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblDatabase;
+    private javax.swing.JLabel lblExportPassword;
+    private javax.swing.JLabel lblExportPasswordConfirm;
+    private javax.swing.JLabel lblExportUsername;
     private javax.swing.JLabel lblHostname;
     private javax.swing.JLabel lblIcon;
     private javax.swing.JLabel lblPassword;
@@ -414,10 +527,17 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
     private javax.swing.JLabel lblTitleInfo1;
     private javax.swing.JLabel lblTitleInfo2;
     private javax.swing.JLabel lblUsername1;
+    private javax.swing.JPanel panelConfig;
     private javax.swing.JPanel panelDbms;
+    private javax.swing.JPanel panelExportUser;
     private javax.swing.JPanel panelSettings;
+    private javax.swing.JPanel panelTop;
+    private javax.swing.JPanel panelUser;
     private javax.swing.JTextField txtConfigFile;
     private javax.swing.JTextField txtDatabase;
+    private javax.swing.JPasswordField txtExportPassword;
+    private javax.swing.JPasswordField txtExportPasswordConfirm;
+    private javax.swing.JTextField txtExportUsername;
     private javax.swing.JTextField txtHostname;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JPasswordField txtPasswordConfirm;
@@ -475,6 +595,31 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
             errorMessage = "The passwords doesnt match";
             type = ValidationType.ERROR;
             component = txtPasswordConfirm;
+
+        } else if (StringUtil.isBlank(txtExportUsername.getText())) {
+            errorMessage = "The export username cannot be blank";
+            type = ValidationType.ERROR;
+            component = txtExportUsername;
+
+        } else if (StringUtil.isBlank(new String(txtExportPassword.getPassword()))) {
+            errorMessage = "The export password field cannot be blank";
+            type = ValidationType.ERROR;
+            component = txtExportPassword;
+
+        } else if (StringUtil.isBlank(new String(txtExportPasswordConfirm.getPassword()))) {
+            errorMessage = "The retyped export password cannot be blank";
+            type = ValidationType.ERROR;
+            component = txtExportPasswordConfirm;
+
+        } else if (!StringUtil.equals(txtExportPassword.getPassword(), txtExportPasswordConfirm.getPassword())) {
+            errorMessage = "The export user passwords do not match";
+            type = ValidationType.ERROR;
+            component = txtExportPasswordConfirm;
+
+        } else if (StringUtil.equals(txtUsername.getText().trim(), txtExportUsername.getText().trim())) {
+            errorMessage = "The export username must be different from the main database username for security isolation";
+            type = ValidationType.ERROR;
+            component = txtExportUsername;
         }
         
         
@@ -494,6 +639,14 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
         map.put(KEY_DATASOURCE_HOSTNAME, txtHostname.getText());
         map.put(KEY_DATASOURCE_DATABASE, txtDatabase.getText());
         
+        // Export Read-Only Data Export DataSource Keys
+        map.put(KEY_EXPORT_DATASOURCE_POOLED, "true");
+        map.put(KEY_EXPORT_DATASOURCE_DRIVER, chkMySqlDb.isSelected() ? DRIVER_MYSQL : DRIVER_POSTGRES);
+        map.put(KEY_EXPORT_DATASOURCE_DIALECT, chkMySqlDb.isSelected() ? DIALECT_MYSQL : DIALECT_POSTGRES);
+        map.put(KEY_EXPORT_DATASOURCE_USERNAME, txtExportUsername.getText().trim());
+        map.put(KEY_EXPORT_DATASOURCE_PASSWORD, new String(txtExportPassword.getPassword()).trim());
+        map.put(KEY_EXPORT_DATASOURCE_URL, getExportUrl());
+
         return map;
     }
     
@@ -561,6 +714,15 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
         txtUsername.setText(username);
         txtPassword.setText(password);
         txtPasswordConfirm.setText(password);
+
+        String exportUsername = mapConfigFile.get(KEY_EXPORT_DATASOURCE_USERNAME);
+        String exportPassword = mapConfigFile.get(KEY_EXPORT_DATASOURCE_PASSWORD);
+        if (StringUtil.isBlank(exportUsername)) exportUsername = "hds_export";
+        if (StringUtil.isBlank(exportPassword)) exportPassword = "hds_export_pass";
+
+        txtExportUsername.setText(exportUsername);
+        txtExportPassword.setText(exportPassword);
+        txtExportPasswordConfirm.setText(exportPassword);
         
     }
     

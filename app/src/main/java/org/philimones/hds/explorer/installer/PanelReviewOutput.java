@@ -4,6 +4,7 @@
  */
 package org.philimones.hds.explorer.installer;
 
+import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTextPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -81,7 +83,7 @@ public class PanelReviewOutput extends javax.swing.JPanel implements IPage {
         lblTitle = new javax.swing.JLabel();
         lblTitleInfo1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        txtReviewConfig = new javax.swing.JTextPane();
+        txtReviewConfig = new NoWrapJTextPane();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtWarLocation = new javax.swing.JTextField();
@@ -482,8 +484,25 @@ public class PanelReviewOutput extends javax.swing.JPanel implements IPage {
         }        
     }
     
+    class NoWrapJTextPane extends JTextPane {
+        @Override
+        public boolean getScrollableTracksViewportWidth() {
+            // Only track viewport width when the viewport is wider than the preferred width
+            return getUI().getPreferredSize(this).width 
+                <= getParent().getSize().width;
+        };
+
+        @Override
+        public Dimension getPreferredSize() {
+            // Avoid substituting the minimum width for the preferred width when the viewport is too narrow
+            return getUI().getPreferredSize(this);
+        };
+    }
+    
     enum WarFileLocation {
         INTERNAL, EXTERNAL
     }
+    
+    
     
 }

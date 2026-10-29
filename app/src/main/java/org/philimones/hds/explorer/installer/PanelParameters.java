@@ -43,7 +43,11 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     static final String KEY_SYS_CODEICR = "hds.explorer.system.codegenerator_rules.incremental";
     static final String KEY_SYSTEM_PATH = "hds.explorer.system.path"; //"/var/lib/hds-explorer"
     static final String KEY_SYSTEM_USE_ETHIOPIAN_CALENDAR = "hds.explorer.system.use.ethiopian.calendar";
-    static final String KEY_SYSTEM_EXPORT_HISTORY_MODE = "hds.explorer.system.export.history.mode";    
+    static final String KEY_SYSTEM_EXPORT_HISTORY_MODE = "hds.explorer.system.export.history.mode";
+    static final String KEY_SYSTEM_AI_PROVIDER = "hds.explorer.system.ai.provider";
+    static final String KEY_SYSTEM_AI_OLLAMA_URL = "hds.explorer.system.ai.ollama.url";
+    static final String KEY_SYSTEM_AI_API_KEY = "hds.explorer.system.ai.api.key";
+    static final String KEY_SYSTEM_AI_MODEL_NAME = "hds.explorer.system.ai.model.name";
     static final String KEY_EMAIL = "grails.mail.username";
     static final String KEY_EMAIL_PASSWORD = "grails.mail.password";
     
@@ -53,9 +57,14 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                                                           "org.philimone.hds.explorer.server.settings.generator.KimpeseHdssCodeGenerator",
                                                           "org.philimone.hds.explorer.server.settings.generator.NavrongoHdssCodeGenerator");
     static List<String> codeGeneratorRulesList = Arrays.asList("FILL_GAPS", "INCREMENT_LAST_CODE");
+    static List<String> aiProviderList = Arrays.asList("ollama", "groq", "gemini", "openai", "openrouter");
     
     private Map<String, String> mapConfigFile;
     private String historyExportMode;
+    private String aiProvider = "ollama";
+    private String aiOllamaUrl = "http://localhost:11434";
+    private String aiApiKey = "";
+    private String aiModelName = "gemma4";
     
     /**
      * Creates new form PanelDatabase
@@ -67,6 +76,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
         
         setupTextChanges();
         makeNumericFields();
+        onAiProviderSelected(0);
     }
     
     private void setupTextChanges(){
@@ -264,38 +274,51 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        topPanel = new javax.swing.JPanel();
         lblIcon = new javax.swing.JLabel();
         lblTitle = new javax.swing.JLabel();
         lblTitleInfo1 = new javax.swing.JLabel();
-        panelSettings = new javax.swing.JPanel();
-        lblHostname = new javax.swing.JLabel();
-        lblPort = new javax.swing.JLabel();
-        lblUsername = new javax.swing.JLabel();
-        lblPassword = new javax.swing.JLabel();
-        lblPasswordConfirm = new javax.swing.JLabel();
+        mainTabPane = new javax.swing.JTabbedPane();
+        panelSystemParams = new javax.swing.JPanel();
+        panelParams = new javax.swing.JPanel();
+        lblSystemPath = new javax.swing.JLabel();
+        lblLanguage = new javax.swing.JLabel();
         txtSystemPath = new javax.swing.JTextField();
+        cboSystemLanguage = new javax.swing.JComboBox<>();
+        lblCodeGen = new javax.swing.JLabel();
+        cboSystemCodeGen = new javax.swing.JComboBox<>();
+        jSeparator1 = new javax.swing.JSeparator();
+        lblCodeGenIncRule = new javax.swing.JLabel();
+        cboSystemCodeGenIcr = new javax.swing.JComboBox<>();
+        cboSystemCalendar = new javax.swing.JComboBox<>();
+        lblCalendar = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        lblProvider = new javax.swing.JLabel();
+        cboAiProvider = new javax.swing.JComboBox();
+        lblOllamaUrl = new javax.swing.JLabel();
+        txtAiOllamaUrl = new javax.swing.JTextField();
+        lblAiModel = new javax.swing.JLabel();
+        txtAiModelName = new javax.swing.JTextField();
+        lblAiApiKey = new javax.swing.JLabel();
+        txtAiApiKey = new javax.swing.JPasswordField();
+        panelDemographics = new javax.swing.JPanel();
+        panelAgesParams = new javax.swing.JPanel();
+        txtMinRespondentAge = new javax.swing.JTextField();
+        lblMinRespAge = new javax.swing.JLabel();
+        lblMinHeadAge = new javax.swing.JLabel();
+        txtMinHeadAge = new javax.swing.JTextField();
+        txtMinSpouseAge = new javax.swing.JTextField();
+        lblMinSpouseAge = new javax.swing.JLabel();
+        lblMinMotherAge = new javax.swing.JLabel();
+        txtMinMotherAge = new javax.swing.JTextField();
         txtMinFatherAge = new javax.swing.JTextField();
+        lblMinFatherAge = new javax.swing.JLabel();
         panelDbms = new javax.swing.JPanel();
         chkUseGmail = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtEmailPassword = new javax.swing.JPasswordField();
-        cboSystemLanguage = new javax.swing.JComboBox<>();
-        txtMinMotherAge = new javax.swing.JTextField();
-        txtMinSpouseAge = new javax.swing.JTextField();
-        lblPasswordConfirm1 = new javax.swing.JLabel();
-        txtMinHeadAge = new javax.swing.JTextField();
-        lblPort1 = new javax.swing.JLabel();
-        cboSystemCodeGen = new javax.swing.JComboBox<>();
-        jSeparator1 = new javax.swing.JSeparator();
-        lblPort2 = new javax.swing.JLabel();
-        cboSystemCodeGenIcr = new javax.swing.JComboBox<>();
-        txtMinRespondentAge = new javax.swing.JTextField();
-        lblPasswordConfirm2 = new javax.swing.JLabel();
-        cboSystemCalendar = new javax.swing.JComboBox<>();
-        lblPort3 = new javax.swing.JLabel();
         panelVisits = new javax.swing.JPanel();
         txtVisitAnt1 = new javax.swing.JTextField();
         lblPasswordConfirm3 = new javax.swing.JLabel();
@@ -327,8 +350,8 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
         setPreferredSize(new java.awt.Dimension(701, 532));
         setRequestFocusEnabled(false);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        topPanel.setBackground(new java.awt.Color(255, 255, 255));
+        topPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         lblIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/hds-icon-1.png"))); // NOI18N
 
@@ -342,25 +365,25 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
 
         lblTitleInfo1.setText("Choose the default parameters of the system and HDSS site specific variables");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout topPanelLayout = new javax.swing.GroupLayout(topPanel);
+        topPanel.setLayout(topPanelLayout);
+        topPanelLayout.setHorizontalGroup(
+            topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(topPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblIcon)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTitleInfo1))
                 .addContainerGap(230, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        topPanelLayout.setVerticalGroup(
+            topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(topPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(topPanelLayout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
@@ -369,17 +392,13 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        panelSettings.setBorder(javax.swing.BorderFactory.createTitledBorder("Parameters"));
+        mainTabPane.setName(""); // NOI18N
 
-        lblHostname.setText("System Resources Path:");
+        panelParams.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        lblPort.setText("System Language:");
+        lblSystemPath.setText("System Resources Path:");
 
-        lblUsername.setText("Minimum Father Age");
-
-        lblPassword.setText("Minimum Mother Age:");
-
-        lblPasswordConfirm.setText("Minimum Spouse Age:");
+        lblLanguage.setText("System Language:");
 
         txtSystemPath.setText("/var/lib/hds-explorer");
         txtSystemPath.addActionListener(new java.awt.event.ActionListener() {
@@ -388,7 +407,225 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
             }
         });
 
+        cboSystemLanguage.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "English", "French", "Portuguese", "Amharic (Ethiopian)" }));
+        cboSystemLanguage.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboSystemLanguageItemStateChanged(evt);
+            }
+        });
+        cboSystemLanguage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboSystemLanguageActionPerformed(evt);
+            }
+        });
+
+        lblCodeGen.setText("System Code Generator:");
+
+        cboSystemCodeGen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default Code Generator (Household no: TXUPF1001) (Region+User+001)", "Simple Code Generator   (Household no: TXU000001) (Region+000001)", "Compound Based Code Scheme Generator (Household no: TXU000001001) (RegionCompound+001)", "Kimpese HDSS Code Scheme Generator - DRC  (Household no: A04A00101) (Concession+01)", "Navrongo HDSS Compound-Based Code Scheme Generator  (Household no: TXU000001001) (RegionCompound+001)" }));
+        cboSystemCodeGen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboSystemCodeGenActionPerformed(evt);
+            }
+        });
+
+        lblCodeGenIncRule.setText("Code Generator Incremental Rule:");
+
+        cboSystemCodeGenIcr.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fill Gaps (Fill first missing codes that increment from Last)", "Increment the Last maximun code" }));
+        cboSystemCodeGenIcr.setSelectedIndex(1);
+        cboSystemCodeGenIcr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboSystemCodeGenIcrActionPerformed(evt);
+            }
+        });
+
+        cboSystemCalendar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Gregorian Calendar (Default)", "Ethiopian Calendar" }));
+        cboSystemCalendar.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboSystemCalendarItemStateChanged(evt);
+            }
+        });
+        cboSystemCalendar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboSystemCalendarActionPerformed(evt);
+            }
+        });
+
+        lblCalendar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblCalendar.setText("System Calendar:");
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("AI Prompt Configuration"));
+
+        lblProvider.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblProvider.setText("AI Provider");
+
+        cboAiProvider.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Ollama (Local)", "Groq AI", "Google Gemini", "OpenAI", "OpenRouter" }));
+        cboAiProvider.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboAiProviderItemStateChanged(evt);
+            }
+        });
+        cboAiProvider.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboAiProviderActionPerformed(evt);
+            }
+        });
+
+        lblOllamaUrl.setText("AI Ollama URL");
+
+        txtAiOllamaUrl.setText("http://localhost:11434");
+
+        lblAiModel.setText("AI Model");
+
+        txtAiModelName.setText("gemma4");
+
+        lblAiApiKey.setText("AI API Key");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblProvider)
+                    .addComponent(lblAiModel)
+                    .addComponent(lblAiApiKey))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtAiApiKey)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(txtAiModelName, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(cboAiProvider, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)
+                        .addComponent(lblOllamaUrl)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtAiOllamaUrl)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cboAiProvider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblOllamaUrl)
+                        .addComponent(txtAiOllamaUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblProvider))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtAiModelName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblAiModel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtAiApiKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblAiApiKey))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout panelParamsLayout = new javax.swing.GroupLayout(panelParams);
+        panelParams.setLayout(panelParamsLayout);
+        panelParamsLayout.setHorizontalGroup(
+            panelParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator1)
+            .addGroup(panelParamsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panelParamsLayout.createSequentialGroup()
+                        .addGroup(panelParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblSystemPath)
+                            .addComponent(lblLanguage)
+                            .addComponent(lblCodeGen)
+                            .addComponent(lblCodeGenIncRule))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cboSystemCodeGen, 0, 0, Short.MAX_VALUE)
+                            .addComponent(txtSystemPath)
+                            .addGroup(panelParamsLayout.createSequentialGroup()
+                                .addComponent(cboSystemLanguage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                                .addComponent(lblCalendar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cboSystemCalendar, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cboSystemCodeGenIcr, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
+        panelParamsLayout.setVerticalGroup(
+            panelParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelParamsLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSystemPath)
+                    .addComponent(txtSystemPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cboSystemLanguage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboSystemCalendar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCalendar)
+                    .addComponent(lblLanguage))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cboSystemCodeGen)
+                    .addComponent(lblCodeGen, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cboSystemCodeGenIcr)
+                    .addComponent(lblCodeGenIncRule, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(222, 222, 222))
+        );
+
+        javax.swing.GroupLayout panelSystemParamsLayout = new javax.swing.GroupLayout(panelSystemParams);
+        panelSystemParams.setLayout(panelSystemParamsLayout);
+        panelSystemParamsLayout.setHorizontalGroup(
+            panelSystemParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSystemParamsLayout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(panelParams, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(8, 8, 8))
+        );
+        panelSystemParamsLayout.setVerticalGroup(
+            panelSystemParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSystemParamsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelParams, javax.swing.GroupLayout.PREFERRED_SIZE, 383, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        mainTabPane.addTab("System Parameters", panelSystemParams);
+
+        panelAgesParams.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
+        txtMinRespondentAge.setText("12");
+        txtMinRespondentAge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMinRespondentAgeActionPerformed(evt);
+            }
+        });
+
+        lblMinRespAge.setText("Minimum Respondent Age:");
+
+        lblMinHeadAge.setText("Minimum Head of Household Age:");
+
+        txtMinHeadAge.setText("16");
+
+        txtMinSpouseAge.setText("12");
+
+        lblMinSpouseAge.setText("Minimum Spouse Age:");
+
+        lblMinMotherAge.setText("Minimum Mother Age:");
+
+        txtMinMotherAge.setText("12");
+
         txtMinFatherAge.setText("12");
+
+        lblMinFatherAge.setText("Minimum Father Age");
 
         panelDbms.setBorder(javax.swing.BorderFactory.createTitledBorder("Mail Configuration"));
         panelDbms.setPreferredSize(new java.awt.Dimension(353, 134));
@@ -414,13 +651,12 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelDbmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelDbmsLayout.createSequentialGroup()
+                        .addComponent(chkUseGmail)
+                        .addGap(0, 167, Short.MAX_VALUE))
                     .addComponent(txtEmail)
                     .addComponent(txtEmailPassword))
                 .addContainerGap())
-            .addGroup(panelDbmsLayout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(chkUseGmail)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelDbmsLayout.setVerticalGroup(
             panelDbmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -435,71 +671,8 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                 .addGroup(panelDbmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtEmailPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
-
-        cboSystemLanguage.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "English", "French", "Portuguese", "Amharic (Ethiopian)" }));
-        cboSystemLanguage.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cboSystemLanguageItemStateChanged(evt);
-            }
-        });
-        cboSystemLanguage.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboSystemLanguageActionPerformed(evt);
-            }
-        });
-
-        txtMinMotherAge.setText("12");
-
-        txtMinSpouseAge.setText("12");
-
-        lblPasswordConfirm1.setText("Minimum Head of Household Age:");
-
-        txtMinHeadAge.setText("16");
-
-        lblPort1.setText("System Code Generator:");
-
-        cboSystemCodeGen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default Code Generator (Household no: TXUPF1001) (Region+User+001)", "Simple Code Generator   (Household no: TXU000001) (Region+000001)", "Compound Based Code Scheme Generator (Household no: TXU000001001) (RegionCompound+001)", "Kimpese HDSS Code Scheme Generator - DRC  (Household no: A04A00101) (Concession+01)", "Navrongo HDSS Compound-Based Code Scheme Generator  (Household no: TXU000001001) (RegionCompound+001)" }));
-        cboSystemCodeGen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboSystemCodeGenActionPerformed(evt);
-            }
-        });
-
-        lblPort2.setText("Code Generator Incremental Rule:");
-
-        cboSystemCodeGenIcr.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fill Gaps (Fill first missing codes that increment from Last)", "Increment the Last maximun code" }));
-        cboSystemCodeGenIcr.setSelectedIndex(1);
-        cboSystemCodeGenIcr.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboSystemCodeGenIcrActionPerformed(evt);
-            }
-        });
-
-        txtMinRespondentAge.setText("12");
-        txtMinRespondentAge.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtMinRespondentAgeActionPerformed(evt);
-            }
-        });
-
-        lblPasswordConfirm2.setText("Minimum Respondent Age:");
-
-        cboSystemCalendar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Gregorian Calendar (Default)", "Ethiopian Calendar" }));
-        cboSystemCalendar.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cboSystemCalendarItemStateChanged(evt);
-            }
-        });
-        cboSystemCalendar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboSystemCalendarActionPerformed(evt);
-            }
-        });
-
-        lblPort3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblPort3.setText("System Calendar:");
 
         panelVisits.setBorder(javax.swing.BorderFactory.createTitledBorder("Pregnancy Surveillance Visits"));
 
@@ -629,7 +802,7 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                         .addComponent(txtVisitPos8, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel6)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         panelVisitsLayout.setVerticalGroup(
             panelVisitsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -667,131 +840,110 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout panelSettingsLayout = new javax.swing.GroupLayout(panelSettings);
-        panelSettings.setLayout(panelSettingsLayout);
-        panelSettingsLayout.setHorizontalGroup(
-            panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1)
-            .addGroup(panelSettingsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelSettingsLayout.createSequentialGroup()
-                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblUsername)
-                            .addComponent(lblPassword)
-                            .addComponent(lblPasswordConfirm)
-                            .addComponent(lblPasswordConfirm1)
-                            .addComponent(lblPasswordConfirm2))
+        javax.swing.GroupLayout panelAgesParamsLayout = new javax.swing.GroupLayout(panelAgesParams);
+        panelAgesParams.setLayout(panelAgesParamsLayout);
+        panelAgesParamsLayout.setHorizontalGroup(
+            panelAgesParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAgesParamsLayout.createSequentialGroup()
+                .addGroup(panelAgesParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelAgesParamsLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(panelVisits, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelAgesParamsLayout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addGroup(panelAgesParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblMinFatherAge)
+                            .addComponent(lblMinMotherAge)
+                            .addComponent(lblMinSpouseAge)
+                            .addComponent(lblMinHeadAge)
+                            .addComponent(lblMinRespAge))
                         .addGap(16, 16, 16)
-                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelAgesParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtMinHeadAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtMinRespondentAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtMinFatherAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtMinMotherAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtMinSpouseAge, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(27, 27, 27)
-                        .addComponent(panelDbms, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(panelSettingsLayout.createSequentialGroup()
-                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblHostname)
-                            .addComponent(lblPort)
-                            .addComponent(lblPort1)
-                            .addComponent(lblPort2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cboSystemCodeGen, 0, 0, Short.MAX_VALUE)
-                            .addComponent(txtSystemPath)
-                            .addGroup(panelSettingsLayout.createSequentialGroup()
-                                .addComponent(cboSystemCodeGenIcr, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(panelSettingsLayout.createSequentialGroup()
-                                .addComponent(cboSystemLanguage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblPort3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cboSystemCalendar, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(11, 12, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSettingsLayout.createSequentialGroup()
-                        .addComponent(panelVisits, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
-        );
-        panelSettingsLayout.setVerticalGroup(
-            panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelSettingsLayout.createSequentialGroup()
-                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblHostname)
-                    .addComponent(txtSystemPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cboSystemLanguage)
-                    .addComponent(cboSystemCalendar)
-                    .addComponent(lblPort3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblPort, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(cboSystemCodeGen)
-                    .addComponent(lblPort1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(cboSystemCodeGenIcr)
-                    .addComponent(lblPort2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelSettingsLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelSettingsLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(lblPassword)
-                                    .addComponent(txtMinMotherAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtMinSpouseAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(lblPasswordConfirm1)
-                                    .addComponent(txtMinHeadAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(lblPasswordConfirm2)
-                                    .addComponent(txtMinRespondentAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(panelDbms, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)))
-                    .addGroup(panelSettingsLayout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblUsername)
-                            .addComponent(txtMinFatherAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(44, 44, 44)
-                        .addComponent(lblPasswordConfirm)
-                        .addGap(60, 60, 60)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(panelVisits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(panelDbms, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
+        );
+        panelAgesParamsLayout.setVerticalGroup(
+            panelAgesParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAgesParamsLayout.createSequentialGroup()
+                .addGroup(panelAgesParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelAgesParamsLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(panelDbms, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelAgesParamsLayout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(lblMinFatherAge))
+                    .addGroup(panelAgesParamsLayout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(txtMinFatherAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelAgesParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblMinMotherAge)
+                            .addComponent(txtMinMotherAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelAgesParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtMinSpouseAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblMinSpouseAge))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelAgesParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblMinHeadAge)
+                            .addComponent(txtMinHeadAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelAgesParamsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblMinRespAge)
+                            .addComponent(txtMinRespondentAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addComponent(panelVisits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(76, 76, 76))
         );
 
         panelVisits.getAccessibleContext().setAccessibleName("Visits Schedules");
         panelVisits.getAccessibleContext().setAccessibleParent(panelVisits);
 
+        javax.swing.GroupLayout panelDemographicsLayout = new javax.swing.GroupLayout(panelDemographics);
+        panelDemographics.setLayout(panelDemographicsLayout);
+        panelDemographicsLayout.setHorizontalGroup(
+            panelDemographicsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDemographicsLayout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(panelAgesParams, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(8, 8, 8))
+        );
+        panelDemographicsLayout.setVerticalGroup(
+            panelDemographicsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDemographicsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelAgesParams, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(8, 8, 8))
+        );
+
+        mainTabPane.addTab("HDSS Parameters", panelDemographics);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(topPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(mainTabPane))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(panelSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(176, 176, 176))
+                .addComponent(topPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(432, 432, 432))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGap(0, 100, Short.MAX_VALUE)
+                    .addComponent(mainTabPane, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
+
+        mainTabPane.getAccessibleContext().setAccessibleName("System Parameters");
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtMinRespondentAgeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMinRespondentAgeActionPerformed
@@ -833,8 +985,19 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
         // TODO add your handling code here:
     }//GEN-LAST:event_cboSystemCalendarActionPerformed
 
+    private void cboAiProviderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboAiProviderActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboAiProviderActionPerformed
+
+    private void cboAiProviderItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboAiProviderItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            onAiProviderSelected(cboAiProvider.getSelectedIndex());
+        }
+    }//GEN-LAST:event_cboAiProviderItemStateChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox cboAiProvider;
     private javax.swing.JComboBox<String> cboSystemCalendar;
     private javax.swing.JComboBox<String> cboSystemCodeGen;
     private javax.swing.JComboBox<String> cboSystemCodeGenIcr;
@@ -848,24 +1011,36 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JLabel lblHostname;
+    private javax.swing.JLabel lblAiApiKey;
+    private javax.swing.JLabel lblAiModel;
+    private javax.swing.JLabel lblCalendar;
+    private javax.swing.JLabel lblCodeGen;
+    private javax.swing.JLabel lblCodeGenIncRule;
     private javax.swing.JLabel lblIcon;
-    private javax.swing.JLabel lblPassword;
-    private javax.swing.JLabel lblPasswordConfirm;
-    private javax.swing.JLabel lblPasswordConfirm1;
-    private javax.swing.JLabel lblPasswordConfirm2;
+    private javax.swing.JLabel lblLanguage;
+    private javax.swing.JLabel lblMinFatherAge;
+    private javax.swing.JLabel lblMinHeadAge;
+    private javax.swing.JLabel lblMinMotherAge;
+    private javax.swing.JLabel lblMinRespAge;
+    private javax.swing.JLabel lblMinSpouseAge;
+    private javax.swing.JLabel lblOllamaUrl;
     private javax.swing.JLabel lblPasswordConfirm3;
     private javax.swing.JLabel lblPasswordConfirm4;
-    private javax.swing.JLabel lblPort;
-    private javax.swing.JLabel lblPort1;
-    private javax.swing.JLabel lblPort2;
-    private javax.swing.JLabel lblPort3;
+    private javax.swing.JLabel lblProvider;
+    private javax.swing.JLabel lblSystemPath;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblTitleInfo1;
-    private javax.swing.JLabel lblUsername;
+    private javax.swing.JTabbedPane mainTabPane;
+    private javax.swing.JPanel panelAgesParams;
     private javax.swing.JPanel panelDbms;
-    private javax.swing.JPanel panelSettings;
+    private javax.swing.JPanel panelDemographics;
+    private javax.swing.JPanel panelParams;
+    private javax.swing.JPanel panelSystemParams;
     private javax.swing.JPanel panelVisits;
+    private javax.swing.JPanel topPanel;
+    private javax.swing.JPasswordField txtAiApiKey;
+    private javax.swing.JTextField txtAiModelName;
+    private javax.swing.JTextField txtAiOllamaUrl;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JPasswordField txtEmailPassword;
     private javax.swing.JTextField txtMaxAntepartumVisits;
@@ -1013,6 +1188,27 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
             errorMessage = "The number of days of the (8th pospartum visit) must be greater than zero and greater than the previous visit day number";
             type = ValidationType.ERROR;
             component = txtVisitPos8;
+        } else {
+            int selectedProviderIndex = cboAiProvider != null ? cboAiProvider.getSelectedIndex() : 0;
+            boolean isOllama = selectedProviderIndex == 0;
+
+            if (isOllama && txtAiOllamaUrl != null && StringUtil.isBlank(txtAiOllamaUrl.getText())) {
+                errorMessage = "The Ollama Base URL cannot be blank";
+                type = ValidationType.ERROR;
+                component = txtAiOllamaUrl;
+            } else if (isOllama && txtAiOllamaUrl != null && !txtAiOllamaUrl.getText().trim().toLowerCase().startsWith("http://") && !txtAiOllamaUrl.getText().trim().toLowerCase().startsWith("https://")) {
+                errorMessage = "The Ollama Base URL must start with http:// or https://";
+                type = ValidationType.ERROR;
+                component = txtAiOllamaUrl;
+            } else if (!isOllama && txtAiApiKey != null && StringUtil.isBlank(new String(txtAiApiKey.getPassword()))) {
+                errorMessage = "The AI Provider API Key cannot be blank for " + (aiProviderList.size() > selectedProviderIndex ? aiProviderList.get(selectedProviderIndex) : "cloud") + " provider";
+                type = ValidationType.ERROR;
+                component = txtAiApiKey;
+            } else if (txtAiModelName != null && StringUtil.isBlank(txtAiModelName.getText())) {
+                errorMessage = "The AI Model Name cannot be blank";
+                type = ValidationType.ERROR;
+                component = txtAiModelName;
+            }
         }
         
         return new ValidationResult(type, errorMessage, component);
@@ -1053,6 +1249,12 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
         map.put(KEY_SYSTEM_PATH, txtSystemPath.getText());
         map.put(KEY_SYSTEM_USE_ETHIOPIAN_CALENDAR, isEthiopianSelected()+""); //chkUseEthiopianCalendar.isSelected()+"");
         map.put(KEY_SYSTEM_EXPORT_HISTORY_MODE, historyExportMode==null ? "FULL" : historyExportMode);
+
+        map.put(KEY_SYSTEM_AI_PROVIDER, cboAiProvider != null ? aiProviderList.get(cboAiProvider.getSelectedIndex()) : (aiProvider == null ? "ollama" : aiProvider));
+        map.put(KEY_SYSTEM_AI_OLLAMA_URL, txtAiOllamaUrl != null ? txtAiOllamaUrl.getText().trim() : (aiOllamaUrl == null ? "http://localhost:11434" : aiOllamaUrl));
+        map.put(KEY_SYSTEM_AI_API_KEY, txtAiApiKey != null ? new String(txtAiApiKey.getPassword()).trim() : (aiApiKey == null ? "" : aiApiKey));
+        map.put(KEY_SYSTEM_AI_MODEL_NAME, txtAiModelName != null ? txtAiModelName.getText().trim() : (aiModelName == null ? "gemma4" : aiModelName));
+
         map.put(KEY_EMAIL, txtEmail.getText());
         map.put(KEY_EMAIL_PASSWORD, new String(txtEmailPassword.getPassword()));
         
@@ -1084,11 +1286,18 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
             String passwrd = mapConfigFile.get(KEY_EMAIL_PASSWORD);
             String ethipca = mapConfigFile.get(KEY_SYSTEM_USE_ETHIOPIAN_CALENDAR);
             String hisexmd = mapConfigFile.get(KEY_SYSTEM_EXPORT_HISTORY_MODE);
+            String aiprov = mapConfigFile.get(KEY_SYSTEM_AI_PROVIDER);
+            String aiourl = mapConfigFile.get(KEY_SYSTEM_AI_OLLAMA_URL);
+            String aikey  = mapConfigFile.get(KEY_SYSTEM_AI_API_KEY);
+            String aimod  = mapConfigFile.get(KEY_SYSTEM_AI_MODEL_NAME);
 
             if (StringUtil.isBlank(maxanvi)) maxanvi = "4";
             if (StringUtil.isBlank(maxpovi)) maxpovi = "4";
             if (StringUtil.isBlank(minresp)) minresp = "12";
             if (StringUtil.isBlank(hisexmd)) hisexmd = "FULL";
+            if (StringUtil.isBlank(aiprov)) aiprov = "ollama";
+            if (StringUtil.isBlank(aiourl)) aiourl = "http://localhost:11434";
+            if (StringUtil.isBlank(aimod)) aimod = "gemma4";
 
             txtSystemPath.setText(respath);
             cboSystemLanguage.setSelectedIndex(getSystemLanguageIndex(syslang));
@@ -1109,6 +1318,18 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
             txtEmail.setText(emailad);
             txtEmailPassword.setText(passwrd);
             historyExportMode = hisexmd;
+            this.aiProvider = aiprov;
+            this.aiOllamaUrl = aiourl;
+            this.aiApiKey = aikey == null ? "" : aikey;
+            this.aiModelName = aimod;
+            
+            if (cboAiProvider != null) {
+                int provIdx = aiProviderList.indexOf(aiprov);
+                cboAiProvider.setSelectedIndex(provIdx >= 0 ? provIdx : 0);
+            }
+            if (txtAiOllamaUrl != null) txtAiOllamaUrl.setText(aiourl);
+            if (txtAiApiKey != null) txtAiApiKey.setText(aikey == null ? "" : aikey);
+            if (txtAiModelName != null) txtAiModelName.setText(aimod);
         }
         
     }
@@ -1193,6 +1414,24 @@ public class PanelParameters extends javax.swing.JPanel implements IPage {
         if (values.length > 5) txtVisitPos6.setText(values[5]+"");
         if (values.length > 6) txtVisitPos7.setText(values[6]+"");
         if (values.length > 7) txtVisitPos8.setText(values[7]+"");
+    }
+
+    private void onAiProviderSelected(int selectedIndex) {
+        boolean isOllama = selectedIndex == 0;
+        if (lblOllamaUrl != null) lblOllamaUrl.setEnabled(isOllama);
+        if (txtAiOllamaUrl != null) txtAiOllamaUrl.setEnabled(isOllama);
+        if (lblAiApiKey != null) lblAiApiKey.setEnabled(!isOllama);
+        if (txtAiApiKey != null) txtAiApiKey.setEnabled(!isOllama);
+
+        if (txtAiModelName != null && StringUtil.isBlank(txtAiModelName.getText())) {
+            switch (selectedIndex) {
+                case 0: txtAiModelName.setText("gemma4"); break;
+                case 1: txtAiModelName.setText("llama-3.3-70b-versatile"); break;
+                case 2: txtAiModelName.setText("gemini-1.5-flash"); break;
+                case 3: txtAiModelName.setText("gpt-4o"); break;
+                case 4: txtAiModelName.setText("anthropic/claude-3.5-sonnet"); break;
+            }
+        }
     }
 
     

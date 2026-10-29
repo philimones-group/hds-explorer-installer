@@ -16,8 +16,11 @@ hds.explorer.system.codegenerator_rules.incremental: "INCREMENT_LAST_CODE"
 hds.explorer.system.region.head.support: false
 hds.explorer.system.use.ethiopian.calendar: false
 hds.explorer.system.export.history.mode: "FULL"
+hds.explorer.system.ai.provider: "ollama"
+hds.explorer.system.ai.ollama.url: "http://localhost:11434"
+hds.explorer.system.ai.api.key: ""
+hds.explorer.system.ai.model.name: "gemma4"
 hds.explorer.system.path: "/var/lib/hds-explorer"
-
 
 # Default datasource for HDS-Database
 # Default Config
@@ -27,6 +30,13 @@ dataSource.dialect: org.hibernate.dialect.MySQL8Dialect
 dataSource.username: hds_explorer
 dataSource.password: d33_2019xx
 dataSource.url: jdbc:mysql://localhost/hds_explorer_db?createDatabaseIfNotExist=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+
+dataSource_export.pooled: true
+dataSource_export.driverClassName: com.mysql.cj.jdbc.Driver
+dataSource_export.dialect: org.hibernate.dialect.MySQL8Dialect
+dataSource_export.username: hds_export
+dataSource_export.password: hds_export_pass
+dataSource_export.url: jdbc:mysql://localhost/hds_explorer_db?createDatabaseIfNotExist=true&readOnly=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
 
 # MySQL Config
 #dataSource.pooled: true

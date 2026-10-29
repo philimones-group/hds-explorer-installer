@@ -14,6 +14,7 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -41,7 +42,7 @@ tasks.named('test') {
 }
 
 jar {
-    archiveBaseName = "hds-explorer-installer-1.2.0_build_442"
+    archiveBaseName = "hds-explorer-installer-1.3.0_build_450"
     manifest {
         attributes(
           'Main-Class': 'org.philimones.hds.explorer.installer.App'

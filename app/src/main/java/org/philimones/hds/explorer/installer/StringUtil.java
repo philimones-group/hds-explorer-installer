@@ -53,8 +53,13 @@ public class StringUtil {
     public static boolean equals(char[] c1, char[] c2) {
         return new String(c1).equalsIgnoreCase(new String(c2));
     }
+    
+    public static boolean equals(String s1, String s2) {
+        return s1.equalsIgnoreCase(s2);
+    }
 
     static int[] splitToNumbers(String antschd) {
+        if (antschd == null) return new int[0];
         String[] strs = antschd.split(",");
         int[] numbers = new int[strs.length];
         

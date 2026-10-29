@@ -32,18 +32,19 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
+          <Component id="panelTop" alignment="0" max="32767" attributes="0"/>
           <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="panelConfig" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
+                      <Component id="panelDbms" min="-2" pref="157" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jPanel2" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                      <Component id="panelDbms" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="panelSettings" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="panelSettings" max="32767" attributes="0"/>
+                          <Component id="panelUser" max="32767" attributes="0"/>
+                          <Component id="panelExportUser" alignment="0" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -53,20 +54,26 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+              <Component id="panelTop" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
+              <Component id="panelConfig" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="panelDbms" max="32767" attributes="0"/>
-                  <Component id="panelSettings" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="panelSettings" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="panelUser" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="panelExportUser" max="32767" attributes="0"/>
+                  </Group>
               </Group>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JPanel" name="jPanel1">
+    <Container class="javax.swing.JPanel" name="panelTop">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -169,7 +176,7 @@
                       <Component id="chkPostgresDb" min="-2" max="-2" attributes="0"/>
                       <Component id="chkMySqlDb" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="15" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -218,31 +225,18 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="lblPasswordConfirm" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
-                          <Component id="txtPasswordConfirm" min="-2" pref="212" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lblHostname" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblPort" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblDatabase" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblPassword" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblUsername1" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="16" pref="16" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="txtDatabase" min="-2" pref="212" max="-2" attributes="0"/>
-                              <Component id="txtPassword" min="-2" pref="212" max="-2" attributes="0"/>
-                              <Component id="txtPort" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtHostname" alignment="0" min="-2" pref="212" max="-2" attributes="0"/>
-                              <Component id="txtUsername" min="-2" pref="212" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="lblHostname" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblPort" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblDatabase" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace min="16" pref="16" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="txtDatabase" min="-2" pref="212" max="-2" attributes="0"/>
+                      <Component id="txtPort" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtHostname" alignment="0" min="-2" pref="212" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="125" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -254,32 +248,17 @@
                       <Component id="lblHostname" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtHostname" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lblPort" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtPort" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lblDatabase" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtDatabase" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblUsername1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtUsername" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblPassword" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtPassword" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblPasswordConfirm" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtPasswordConfirm" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace pref="169" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -300,16 +279,6 @@
             <Property name="text" type="java.lang.String" value="Database name:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblPassword">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Database password:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="lblPasswordConfirm">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Retype database password:"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JTextField" name="txtHostname">
           <Properties>
             <Property name="text" type="java.lang.String" value="localhost"/>
@@ -328,23 +297,9 @@
             <Property name="text" type="java.lang.String" value="hds_explorer_db"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JPasswordField" name="txtPassword">
-        </Component>
-        <Component class="javax.swing.JPasswordField" name="txtPasswordConfirm">
-        </Component>
-        <Component class="javax.swing.JLabel" name="lblUsername1">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Database username:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="txtUsername">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="hds_explorer"/>
-          </Properties>
-        </Component>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JPanel" name="jPanel2">
+    <Container class="javax.swing.JPanel" name="panelConfig">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -362,7 +317,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="txtConfigFile" min="-2" pref="466" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="btLoadConfigFile" max="32767" attributes="0"/>
+                  <Component id="btLoadConfigFile" pref="129" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -400,6 +355,170 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btLoadConfigFileActionPerformed"/>
           </Events>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="panelUser">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Main User"/>
+          </Border>
+        </Property>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Component id="lblPassword" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="txtPassword" min="-2" pref="212" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="lblPasswordConfirm" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="txtPasswordConfirm" min="-2" pref="212" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="lblUsername1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="txtUsername" min="-2" pref="212" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblUsername1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtUsername" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblPassword" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtPassword" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="txtPasswordConfirm" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblPasswordConfirm" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="lblUsername1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Database username:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtUsername">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="hds_explorer"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JPasswordField" name="txtPassword">
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblPassword">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Database password:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblPasswordConfirm">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Retype database password:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JPasswordField" name="txtPasswordConfirm">
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="panelExportUser">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Data Export/AI User"/>
+          </Border>
+        </Property>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="lblExportUsername" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblExportPassword" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblExportPasswordConfirm" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="txtExportUsername" pref="209" max="32767" attributes="0"/>
+                      <Component id="txtExportPassword" max="32767" attributes="0"/>
+                      <Component id="txtExportPasswordConfirm" alignment="0" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblExportUsername" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtExportUsername" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblExportPassword" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtExportPassword" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblExportPasswordConfirm" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtExportPasswordConfirm" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="19" max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="lblExportUsername">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Export username (read-only):"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtExportUsername">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="hds_export"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblExportPassword">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Export user password:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JPasswordField" name="txtExportPassword">
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblExportPasswordConfirm">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Retype export password:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JPasswordField" name="txtExportPasswordConfirm">
         </Component>
       </SubComponents>
     </Container>

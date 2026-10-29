@@ -166,6 +166,9 @@
               <Dimension value="[675, 22]"/>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new NoWrapJTextPane()"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
