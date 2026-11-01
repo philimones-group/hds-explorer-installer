@@ -30,6 +30,9 @@ dataSource.dialect: org.hibernate.dialect.MySQL8Dialect
 dataSource.username: hds_explorer
 dataSource.password: d33_2019xx
 dataSource.url: jdbc:mysql://localhost/hds_explorer_db?createDatabaseIfNotExist=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+# Docker Compose MySQL Config - the hostname is "docker-hds-db" uncomment to use it with docker
+# dataSource.url: jdbc:mysql://docker-hds-db:3306/hds_explorer_db?createDatabaseIfNotExist=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+
 
 dataSource_export.pooled: true
 dataSource_export.driverClassName: com.mysql.cj.jdbc.Driver

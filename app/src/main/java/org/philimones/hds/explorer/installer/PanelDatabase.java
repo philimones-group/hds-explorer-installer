@@ -31,6 +31,7 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
     static final String URL_POSTGRES = "jdbc:postgresql://$HOSTNAME:$PORT/$DATABASE";
     static final String URL_MYSQL = "jdbc:mysql://$HOSTNAME:$PORT/$DATABASE?createDatabaseIfNotExist=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true";
     static final String URL_MYSQL_EXPORT = "jdbc:mysql://$HOSTNAME:$PORT/$DATABASE?createDatabaseIfNotExist=true&autoReconnect=true&readOnly=true&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true";
+    static final String DOCKER_HOSTNAME = "docker-hds-db";
         
     static final String KEY_DATASOURCE_POOLED = "dataSource.pooled";
     static final String KEY_DATASOURCE_DRIVER = "dataSource.driverClassName";
@@ -81,10 +82,12 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
 
     private String getUrl() {
         
+        boolean hasDockerHostname = chkExportDockerHostname.isSelected();
+        
         if (chkMySqlDb.isSelected()) {
-            return createMySqlUrl(txtHostname.getText(), txtDatabase.getText(), txtPort.getText());
+            return createMySqlUrl(hasDockerHostname ? DOCKER_HOSTNAME : txtHostname.getText(), txtDatabase.getText(), txtPort.getText());
         } else {
-            return createPostgresUrl(txtHostname.getText(), txtDatabase.getText(), txtPort.getText());
+            return createPostgresUrl(hasDockerHostname ? DOCKER_HOSTNAME : txtHostname.getText(), txtDatabase.getText(), txtPort.getText());
         }
     }
     
@@ -109,10 +112,13 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
     }
 
     private String getExportUrl() {
+        
+        boolean hasDockerHostname = chkExportDockerHostname.isSelected();
+        
         if (chkMySqlDb.isSelected()) {
-            return createMySqlExportUrl(txtHostname.getText(), txtDatabase.getText(), txtPort.getText());
+            return createMySqlExportUrl(hasDockerHostname ? DOCKER_HOSTNAME : txtHostname.getText(), txtDatabase.getText(), txtPort.getText());
         } else {
-            return createPostgresExportUrl(txtHostname.getText(), txtDatabase.getText(), txtPort.getText());
+            return createPostgresExportUrl(hasDockerHostname ? DOCKER_HOSTNAME : txtHostname.getText(), txtDatabase.getText(), txtPort.getText());
         }
     }
 
@@ -159,6 +165,7 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
         txtHostname = new javax.swing.JTextField();
         txtPort = new javax.swing.JTextField();
         txtDatabase = new javax.swing.JTextField();
+        chkExportDockerHostname = new javax.swing.JCheckBox();
         panelConfig = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtConfigFile = new javax.swing.JTextField();
@@ -286,6 +293,8 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
 
         txtDatabase.setText("hds_explorer_db");
 
+        chkExportDockerHostname.setText("Export Docker Hostname");
+
         javax.swing.GroupLayout panelSettingsLayout = new javax.swing.GroupLayout(panelSettings);
         panelSettings.setLayout(panelSettingsLayout);
         panelSettingsLayout.setHorizontalGroup(
@@ -298,10 +307,11 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
                     .addComponent(lblDatabase))
                 .addGap(16, 16, 16)
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chkExportDockerHostname)
                     .addComponent(txtDatabase, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtHostname, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(125, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelSettingsLayout.setVerticalGroup(
             panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -310,15 +320,17 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblHostname)
                     .addComponent(txtHostname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
+                .addGap(10, 10, 10)
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPort)
                     .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
+                .addGap(10, 10, 10)
                 .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDatabase)
                     .addComponent(txtDatabase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(chkExportDockerHostname)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         panelConfig.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -395,11 +407,11 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
                 .addGroup(panelUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblUsername1)
                     .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
+                .addGap(10, 10, 10)
                 .addGroup(panelUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPassword)
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
+                .addGap(10, 10, 10)
                 .addGroup(panelUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtPasswordConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblPasswordConfirm))
@@ -440,15 +452,15 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
                 .addGroup(panelExportUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblExportUsername)
                     .addComponent(txtExportUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
+                .addGap(10, 10, 10)
                 .addGroup(panelExportUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblExportPassword)
                     .addComponent(txtExportPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
+                .addGap(10, 10, 10)
                 .addGroup(panelExportUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblExportPasswordConfirm)
                     .addComponent(txtExportPasswordConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -479,11 +491,11 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelDbms, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(panelSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(panelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panelExportUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(panelExportUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -511,6 +523,7 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btLoadConfigFile;
     private javax.swing.ButtonGroup checkboxesGroup;
+    private javax.swing.JCheckBox chkExportDockerHostname;
     private javax.swing.JRadioButton chkMySqlDb;
     private javax.swing.JRadioButton chkPostgresDb;
     private javax.swing.JLabel jLabel1;
@@ -669,7 +682,7 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
                     
                     if (line.contains(": ")) {
                         String[] rsplit = line.split(": ");
-                        map.put(rsplit[0].trim(), rsplit[1].trim());
+                        map.put(rsplit[0].trim(), rsplit.length > 1 ? rsplit[1].trim() : "");
                     }
                 }
                 
@@ -704,9 +717,12 @@ public class PanelDatabase extends javax.swing.JPanel implements IPage {
         
         boolean isMysql = dbdriver.equals(PanelInstall.MYSQL_DRIVER_VALUE);
         boolean isPostg = dbdriver.equals(PanelInstall.POSTGRES_DRIVER_VALUE);
+        boolean isDocker = hostname.equals(DOCKER_HOSTNAME);
         
         chkMySqlDb.setSelected(isMysql);
         chkPostgresDb.setSelected(isPostg);
+        
+        chkExportDockerHostname.setSelected(isDocker);
         
         txtHostname.setText(hostname);
         txtPort.setText(getPort(url, hostname));

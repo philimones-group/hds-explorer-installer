@@ -44,6 +44,9 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
     private String mysqlCreateText;
     private String postgresCreateText;
     private String readmeText;
+    private String dockerfileText;
+    private String dockerComposeText;
+    private String dockerInitSqlText;
     
     private InstallListener installListener;
     
@@ -228,27 +231,52 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
         Scanner scan1 = new Scanner(getClass().getResourceAsStream("/samples/create-user-mysql.sql"));
         while (scan1.hasNextLine()) {
             String line = scan1.nextLine();
-            textMysql.append(line+"\n");
+            textMysql.append(line).append("\n");
         }
         scan1.close();
                         
         Scanner scan2 = new Scanner(getClass().getResourceAsStream("/samples/create-user-postgres.sql"));
         while (scan2.hasNextLine()) {
             String line = scan2.nextLine();
-            textPostg.append(line+"\n");
+            textPostg.append(line).append("\n");
         }
         scan2.close();
         
         Scanner scan3 = new Scanner(getClass().getResourceAsStream("/samples/README.html"));
         while (scan3.hasNextLine()) {
             String line = scan3.nextLine();
-            textReadm.append(line+"\n");
+            textReadm.append(line).append("\n");
         }
         scan3.close();
-        
+
+        StringBuilder textDocker = new StringBuilder();
+        StringBuilder textCompose = new StringBuilder();
+        StringBuilder textInitSql = new StringBuilder();
+
+        Scanner scan4 = new Scanner(getClass().getResourceAsStream("/samples/Dockerfile"));
+        while (scan4.hasNextLine()) {
+            textDocker.append(scan4.nextLine()).append("\n");
+        }
+        scan4.close();
+
+        Scanner scan5 = new Scanner(getClass().getResourceAsStream("/samples/docker-compose.yml"));
+        while (scan5.hasNextLine()) {
+            textCompose.append(scan5.nextLine()).append("\n");
+        }
+        scan5.close();
+
+        Scanner scan6 = new Scanner(getClass().getResourceAsStream("/samples/01-init-users.sql"));
+        while (scan6.hasNextLine()) {
+            textInitSql.append(scan6.nextLine()).append("\n");
+        }
+        scan6.close();
+
         this.mysqlCreateText = textMysql.toString();
         this.postgresCreateText = textPostg.toString();
         this.readmeText = textReadm.toString();
+        this.dockerfileText = textDocker.toString();
+        this.dockerComposeText = textCompose.toString();
+        this.dockerInitSqlText = textInitSql.toString();
         
     }
     
@@ -318,9 +346,55 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
         copyFileToDirectory(this.outputDirectory, appConfigFile);
         copyFileToDirectory(this.outputDirectory, databaseFile);
         copyFileToDirectory(this.outputDirectory, readmeFile);
+        createDockerFiles(tempDir, tempWarFile);
         //delay(500);
         
         finishInstall();        
+    }
+
+    private void createDockerFiles(File tempDir, File warFile) {
+        setConfiguringText("Creating and saving Docker deployment files");
+
+        String database = appConfigMap.get(KEY_DATASOURCE_DATABASE);
+        String username = appConfigMap.get(KEY_DATASOURCE_USERNAME);
+        String password = appConfigMap.get(KEY_DATASOURCE_PASSWORD);
+        String exportUsername = appConfigMap.getOrDefault("dataSource_export.username", "hds_export");
+        String exportPassword = appConfigMap.getOrDefault("dataSource_export.password", "hds_export_pass");
+        String port = "3306";
+
+        // Dockerfile
+        String dfContent = dockerfileText.replace("$WAR_FILENAME", warFile.getName());
+        File dfFile = createNewFile(tempDir, "Dockerfile");
+        writeToFile(dfFile, dfContent);
+
+        // docker-compose.yml
+        String dcContent = dockerComposeText;
+        dcContent = dcContent.replace("$DATABASE", database == null ? "hds_explorer_db" : database);
+        dcContent = dcContent.replace("$PASSWORD", password == null ? "hds_explorer_pass" : password);
+        dcContent = dcContent.replace("$PORT", port);
+        File dcFile = createNewFile(tempDir, "docker-compose.yml");
+        writeToFile(dcFile, dcContent);
+
+        // docker-init/01-init-users.sql
+        String sqlContent = dockerInitSqlText;
+        sqlContent = sqlContent.replace("$DATABASE", database == null ? "hds_explorer_db" : database);
+        sqlContent = sqlContent.replace("$USERNAME", username == null ? "hds_explorer" : username);
+        sqlContent = sqlContent.replace("$PASSWORD", password == null ? "hds_explorer_pass" : password);
+        sqlContent = sqlContent.replace("$EXPORT_USERNAME", exportUsername);
+        sqlContent = sqlContent.replace("$EXPORT_PASSWORD", exportPassword);
+
+        File dockerInitDir = new File(tempDir.getAbsolutePath() + "/docker-init");
+        dockerInitDir.mkdirs();
+        File initSqlFile = createNewFile(dockerInitDir, "01-init-users.sql");
+        writeToFile(initSqlFile, sqlContent);
+
+        // Copy files to Output Directory
+        copyFileToDirectory(this.outputDirectory, dfFile);
+        copyFileToDirectory(this.outputDirectory, dcFile);
+
+        File destDockerInitDir = new File(this.outputDirectory.getAbsolutePath() + "/docker-init");
+        destDockerInitDir.mkdirs();
+        copyFileToDirectory(destDockerInitDir, initSqlFile);
     }
     
     private File createTemporaryDir() {
@@ -413,10 +487,35 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
         //readme stuff
         String resources = appConfigMap.get(KEY_SYSTEM_PATH);
         String dbdriver = appConfigMap.get(KEY_DATASOURCE_DRIVER);
+        String dburl = appConfigMap.getOrDefault("dataSource.url", "");
+        String hostname = appConfigMap.getOrDefault(KEY_DATASOURCE_HOSTNAME, "");
         String dbms = (dbdriver.equals(MYSQL_DRIVER_VALUE)) ? "MySQL" : (dbdriver.equals(POSTGRES_DRIVER_VALUE)) ? "PostgreSQL" : "";
         String dbcreate_stmt = (dbdriver.equals(MYSQL_DRIVER_VALUE)) ? sql_mysql : (dbdriver.equals(POSTGRES_DRIVER_VALUE)) ? sql_postg : "";
-                    
+
+        boolean isDockerSelected = dburl.contains("docker") || hostname.contains("docker");
+
+        StringBuilder dockerInstr = new StringBuilder();
+        dockerInstr.append("<h2>🚀 Docker Deployment Instructions</h2>");
+        dockerInstr.append("<p>You can complete deployment of HDS-Explorer Server and MySQL using Docker Compose:</p>");
+        dockerInstr.append("<ol>");
+        dockerInstr.append("<li><strong>Navigate to output directory</strong><br><code>cd ").append(this.outputDirectory.getAbsolutePath()).append("</code></li>");
+
+        if (isDockerSelected) {
+            dockerInstr.append("<li><strong>Database Hostname Status</strong><br><span style=\"color: green;\">✓ Docker hostname (<code>docker-hds-db</code>) is already configured in <code>app-config.yml</code>.</span></li>");
+        } else {
+            dockerInstr.append("<li><strong>Configure Database Hostname for Docker</strong><br><span style=\"color: #d9534f; background-color: #f9f2f4; padding: 2px 4px;\">⚠️ Note: Since database host was set to <code>").append(hostname).append("</code>, if you choose to deploy with Docker Compose, open <code>app-config.yml</code> and change the connection URL hostname to <code>docker-hds-db</code> before running Docker Compose.</span></li>");
+        }
+
+        dockerInstr.append("<li><strong>Launch containers using Docker Compose</strong><br><code>docker compose up -d --build</code></li>");
+        dockerInstr.append("<li><strong>Open HDS-Explorer in your browser</strong><br><code>http://localhost:8080/</code></li>");
+        dockerInstr.append("</ol>");
+
+        if (isDockerSelected) {
+            dockerInstr.append("<p style=\"background-color: #fcf8e3; border-left: 4px solid #f0ad4e; padding: 10px;\"><strong>⚠️ Warning for Standalone Tomcat Deployments:</strong><br>The database hostname in <code>app-config.yml</code> is set to <code>docker-hds-db</code>. Deploying this WAR to a standalone Tomcat server will fail to connect unless you update <code>app-config.yml</code> connection URL hostname to your MySQL server's hostname or IP address (e.g. <code>localhost</code>).</p>");
+        }
+
         String content = readmeText;
+        content = content.replace("$DOCKER_INSTRUCTIONS", dockerInstr.toString());
         content = content.replace("$DB_CREATE_STATEMENT", dbcreate_stmt);
         content = content.replace("$OUTPUT_DIR", this.outputDirectory.getAbsolutePath());
         content = content.replace("$CREATE_USER_DB", sqlFile.getName());

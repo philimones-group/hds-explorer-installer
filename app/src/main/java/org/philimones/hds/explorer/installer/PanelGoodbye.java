@@ -84,6 +84,12 @@ public class PanelGoodbye extends javax.swing.JPanel implements IPage {
         lblConfDesc = new javax.swing.JLabel();
         lblReadme = new javax.swing.JLabel();
         lblReadmeDesc = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(701, 532));
         setPreferredSize(new java.awt.Dimension(701, 532));
@@ -103,7 +109,7 @@ public class PanelGoodbye extends javax.swing.JPanel implements IPage {
         jLabel2.setFont(new java.awt.Font("Noto Sans", 1, 11)); // NOI18N
         jLabel2.setText("The configuration generated 4 files that can be found in the output directory");
 
-        jPanel1.setLayout(new java.awt.GridLayout(4, 2, -150, 0));
+        jPanel1.setLayout(new java.awt.GridLayout(7, 2, -150, 0));
 
         lblWarFile.setForeground(java.awt.Color.blue);
         lblWarFile.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -140,8 +146,36 @@ public class PanelGoodbye extends javax.swing.JPanel implements IPage {
         lblReadme.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanel1.add(lblReadme);
 
+        lblReadmeDesc.setFont(new java.awt.Font("Noto Sans", 0, 11)); // NOI18N
         lblReadmeDesc.setText("Web page file containing deployment instructions ");
         jPanel1.add(lblReadmeDesc);
+
+        jLabel1.setForeground(java.awt.Color.blue);
+        jLabel1.setText("<html><u>Dockerfile</u></html>");
+        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jPanel1.add(jLabel1);
+
+        jLabel3.setFont(new java.awt.Font("Noto Sans", 0, 11)); // NOI18N
+        jLabel3.setText("Docker instructions to build the app container image");
+        jPanel1.add(jLabel3);
+
+        jLabel4.setForeground(java.awt.Color.blue);
+        jLabel4.setText("<html><u>docker-compose.yml</u></html>");
+        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jPanel1.add(jLabel4);
+
+        jLabel5.setFont(new java.awt.Font("Noto Sans", 0, 11)); // NOI18N
+        jLabel5.setText("Configuration to launch and link the full container stack");
+        jPanel1.add(jLabel5);
+
+        jLabel6.setForeground(java.awt.Color.blue);
+        jLabel6.setText("<html><u>docker-init/01-init-users.sql</u></html>");
+        jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jPanel1.add(jLabel6);
+
+        jLabel7.setFont(new java.awt.Font("Noto Sans", 0, 11)); // NOI18N
+        jLabel7.setText("Database initialization script run on first startup");
+        jPanel1.add(jLabel7);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -168,14 +202,20 @@ public class PanelGoodbye extends javax.swing.JPanel implements IPage {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(139, 139, 139))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(159, 159, 159))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel label1setup;
     private javax.swing.JLabel label2welcome;
