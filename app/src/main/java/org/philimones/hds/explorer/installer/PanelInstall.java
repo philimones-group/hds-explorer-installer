@@ -507,9 +507,9 @@ public class PanelInstall extends javax.swing.JPanel implements IPage {
         }
 
         dockerInstr.append("<li><strong>Launch containers using Docker Compose</strong><br><code>docker compose up -d --build</code></li>");
-        dockerInstr.append("<li><strong>Open HDS-Explorer in your browser</strong><br><code>http://localhost:8080/</code></li>");
+        dockerInstr.append("<li><strong>Open HDS-Explorer in your browser</strong><br><code>http://localhost:8080/</code></li>");        
+        dockerInstr.append("<li><strong>To Update / Upgrade an Existing Deployment:</strong><br>If you re-ran the installer wizard and exported updated files into this folder, simply run:<br><code>docker compose up -d --build</code><br><span style=\"color: #31708f;\"><em>(Docker will rebuild and replace the application container with your new WAR file. All MySQL database records in <code>mysql_data</code> remain 100% safe!)</em></span></li>");
         dockerInstr.append("</ol>");
-        dockerInstr.append("<p><strong>To Update / Upgrade an Existing Deployment:</strong><br>If you re-ran the installer wizard and exported updated files into this folder, simply run:<br><code>docker compose up -d --build</code><br><span style=\"color: #31708f;\"><em>(Docker will rebuild and replace the application container with your new WAR file. All MySQL database records in <code>mysql_data</code> remain 100% safe!)</em></span></p>");
 
         if (isDockerSelected) {
             dockerInstr.append("<p style=\"background-color: #fcf8e3; border-left: 4px solid #f0ad4e; padding: 10px;\"><strong>⚠️ Warning for Standalone Tomcat Deployments:</strong><br>The database hostname in <code>app-config.yml</code> is set to <code>docker-hds-db</code>. Deploying this WAR to a standalone Tomcat server will fail to connect unless you update <code>app-config.yml</code> connection URL hostname to your MySQL server's hostname or IP address (e.g. <code>localhost</code>).</p>");
